@@ -19,44 +19,45 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id", unique = true, nullable = false)
+    @Column(name = "post_id", nullable = false)
     private int postId;
 
-    @Column(name = "title", unique = false, nullable = false)
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "text", unique = false, nullable = false)
+    @Column(name = "text")
     private String text;
 
-    @Column(name = "creationDate", unique = false, nullable = false)
+    @Column(name = "creationDate")
     private LocalDate creationDate;
 
-    @Column(name = "imagePath", unique = false, nullable = false)
+    @Column(name = "imagePath")
     private String imagePath;
 
     @ManyToOne
-    @JoinColumn(name = "community", nullable = false)
+    @JoinColumn(name = "community_id")
     private Community community;
 
     @ManyToOne
-    @JoinColumn(name = "user", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(cascade = {ALL}, fetch = LAZY)
-    @JoinColumn(name = "reactions")
+    @JoinColumn(name = "reaction_id")
     private Set<Reaction> reactions;
 
     @OneToMany(cascade = {ALL}, fetch = LAZY)
-    @JoinColumn(name = "comments")
+    @JoinColumn(name = "comment_id")
     private Set<Comment> comments;
 
     @OneToMany(cascade = {ALL}, fetch = LAZY)
-    @JoinColumn(name = "reports")
+    @JoinColumn(name = "report_id")
     private Set<Report> reports;
 
     @ManyToOne
-    @JoinColumn(name = "flairs")
+    @JoinColumn(name = "flair_id")
     private Flair flairs;
+
 
 
 

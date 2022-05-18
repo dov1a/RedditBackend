@@ -11,6 +11,6 @@ public interface PostService {
     Optional<Post> findOne(int id);
     List<Post> findAll();
     Post save(Post post);
-    Post delete(int id);
+    void delete(int id);
 
 }

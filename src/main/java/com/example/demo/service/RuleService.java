@@ -11,6 +11,6 @@ public interface RuleService {
     Optional<Rule> findOne(int id);
     List<Rule> findAll();
     Rule save(Rule rule);
-    Rule delete(int id);
+    void delete(int id);
 
 }

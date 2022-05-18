@@ -17,47 +17,48 @@ public class Community {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "community_id", unique = true, nullable = false)
+    @Column(name = "community_id", nullable = false)
     private int communityId;
 
-    @Column(name = "name", unique = false, nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "description", unique = false, nullable = false)
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "creationDate", unique = false, nullable = false)
+    @Column(name = "creationDate")
     private LocalDate creationDate;
 
-    @Column(name = "isSuspend", unique = false, nullable = false)
+    @Column(name = "isSuspend")
     private boolean  isSuspend;
 
-    @Column(name = "suspendedReason", unique = false, nullable = false)
+    @Column(name = "suspendedReason")
     private String  suspendedReason;
 
     @ManyToMany
-    @JoinColumn(name = "flairs")
+    @JoinColumn(name = "flair_id")
     private Set<Flair> flairs;
 
     @OneToMany
-    @JoinColumn(name = "rules")
+    @JoinColumn(name = "rule_id")
     private Set<Rule> rules;
 
     @OneToMany
-    @JoinColumn(name = "posts")
+    @JoinColumn(name = "post_id")
     private Set<Post> posts;
 
     @OneToMany
-    @JoinColumn(name = "banned")
+    @JoinColumn(name = "banned_id")
     private Set<Banned> banned;
 
     @ManyToMany
-    @JoinColumn(name = "users")
+    @JoinColumn(name = "user_id")
     private Set<User> users;
 
     @OneToOne
-    @JoinColumn(name = "moderator")
+    @JoinColumn(name = "user_id")
     private User moderator;
+
 
 
 

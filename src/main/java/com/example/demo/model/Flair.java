@@ -16,18 +16,18 @@ public class Flair {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "flair_id", unique = true, nullable = false)
+    @Column(name = "flair_id", nullable = false)
     private int flairId;
 
     @Column(name = "name", unique = false, nullable = false)
     private String name;
 
-    @ManyToMany
-    @JoinColumn(name = "communities")
+    @OneToMany
+    @JoinColumn(name = "community_id")
     private Set<Community> communities;
 
     @OneToMany
-    @JoinColumn(name = "post")
+    @JoinColumn(name = "post_id")
     private Set<Post> posts;
 
 

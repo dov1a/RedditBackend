@@ -2,15 +2,16 @@ package com.example.demo.service;
 
 import com.example.demo.model.Post;
 import com.example.demo.model.Reaction;
+import com.example.demo.model.Report;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ReportService {
 
-    Optional<Reaction> findOne(int id);
-    List<Reaction> findAll();
-    Reaction save(Reaction reaction);
-    Reaction delete(int id);
+    Optional<Report> findOne(int id);
+    List<Report> findAll();
+    Report save(Report report);
+    void delete(int id);
 
 }

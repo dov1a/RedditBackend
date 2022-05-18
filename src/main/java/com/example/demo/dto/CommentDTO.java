@@ -12,10 +12,10 @@ public class CommentDTO implements Serializable {
     private String text;
     private LocalDate timestamp;
     private boolean isDeleted;
-    private CommentDTO repliesTo;
+    //private CommentDTO repliesTo;
     private Set<ReportDTO> reports;
     private Set<ReactionDTO> reactions;
-    private CommentDTO comment;
+    //private CommentDTO comment;
     private UserDTO user;
     private PostDTO post;
 }

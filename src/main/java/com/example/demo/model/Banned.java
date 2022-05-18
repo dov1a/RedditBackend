@@ -15,19 +15,20 @@ public class Banned {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "banned_id", unique = true, nullable = false)
+    @Column(name = "banned_id", nullable = false)
     private int bannedId;
 
     @Column(name = "timestamp", unique = false, nullable = false)
     private LocalDate timestamp;
 
     @ManyToOne
-    @JoinColumn(name = "by", unique = false, nullable = false)
+    @JoinColumn(name = "user_id", unique = false)
     private User by;
 
     @ManyToOne
-    @JoinColumn(name = "community", unique = false, nullable = false)
+    @JoinColumn(name = "community", unique = false)
     private Community community;
+
 
 
 }

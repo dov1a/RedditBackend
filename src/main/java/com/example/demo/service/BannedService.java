@@ -10,6 +10,6 @@ public interface BannedService {
     Optional<Banned> findOne(int id);
     List<Banned> findAll();
     Banned save(Banned banned);
-    Banned delete(int id);
+    void delete(int id);
 
 }

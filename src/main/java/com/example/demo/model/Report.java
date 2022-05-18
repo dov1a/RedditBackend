@@ -16,7 +16,7 @@ public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "report_id", unique = true, nullable = false)
+    @Column(name = "report_id", nullable = false)
     private int reportId;
 
     @Column(name = "reason", unique = false, nullable = false)
@@ -26,17 +26,16 @@ public class Report {
     private LocalDate timestamp;
 
     @OneToOne
-    @Column(name = "reason", unique = false, nullable = false)
+    @JoinColumn(name = "user_id", unique = false, nullable = false)
     private User byUser;
 
     @ManyToOne
-    @Column(name = "comment", unique = false, nullable = false)
+    @JoinColumn(name = "comment_id", unique = false, nullable = false)
     private Comment comment;
 
     @ManyToOne
-    @Column(name = "post", unique = false, nullable = false)
+    @JoinColumn(name = "post_id", unique = false, nullable = false)
     private Post post;
-
 
     @Column(name = "accepted", unique = false, nullable = false)
     private boolean accepted;

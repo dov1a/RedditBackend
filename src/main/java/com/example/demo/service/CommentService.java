@@ -11,6 +11,6 @@ public interface CommentService {
     Optional<Comment> findOne(int id);
     List<Comment> findAll();
     Comment save(Comment comment);
-    Comment delete(int id);
+    void delete(int id);
 
 }

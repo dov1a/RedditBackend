@@ -16,7 +16,7 @@ public class Reaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "reaction_id", unique = true, nullable = false)
+    @Column(name = "reaction_id", nullable = false)
     private int reactionId;
 
     @Column(name = "type", unique = false, nullable = false)
@@ -26,17 +26,16 @@ public class Reaction {
     private LocalDate timestamp;
 
     @ManyToOne
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "post")
+    @JoinColumn(name = "post_id")
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "comment")
+    @JoinColumn(name = "comment_id")
     private Comment comment;
-
 
 
 }

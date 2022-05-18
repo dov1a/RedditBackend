@@ -17,7 +17,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id", unique = true, nullable = false)
+    @Column(name = "comment_id", nullable = false)
     private int commentId;
 
     @Column(name = "text", unique = false, nullable = false)
@@ -29,28 +29,24 @@ public class Comment {
     @Column(name = "isDeleted", unique = false, nullable = false)
     private boolean isDeleted;
 
-    @ManyToOne
-    @JoinColumn(name = "repliesTo")
-    private Comment repliesTo;
+//    @ManyToOne
+//    @JoinColumn(name = "comment_id")
+//    private Comment repliesTo;
 
     @OneToMany
-    @JoinColumn(name = "reports")
+    @JoinColumn(name = "report_id")
     private Set<Report> reports = new HashSet<>();
 
     @OneToMany
-    @JoinColumn(name = "reactions")
+    @JoinColumn(name = "reaction_id")
     private Set<Reaction> reactions = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "comment")
-    private Comment comment;
-
-    @ManyToOne
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "post")
+    @JoinColumn(name = "post_id")
     private Post post;
 
 

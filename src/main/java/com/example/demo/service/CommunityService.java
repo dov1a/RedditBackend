@@ -11,6 +11,6 @@ public interface CommunityService {
     Optional<Community> findOne(int id);
     List<Community> findAll();
     Community save(Community community);
-    Community delete(int id);
+    void delete(int id);
 
 }
