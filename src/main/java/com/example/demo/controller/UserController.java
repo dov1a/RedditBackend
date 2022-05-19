@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<User>> findAll(){
       return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     };
@@ -32,14 +33,18 @@ public class UserController {
         return new ResponseEntity<>(users.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<User> create(@RequestBody User user){
 
-        User createdUser= userService.save(user);
+    @PostMapping("/create")
+    public ResponseEntity<UserDTO> create(@RequestBody UserDTO newUser){
+
+        User createdUser = userService.createUser(newUser);
+
         if(createdUser == null){
-            return new ResponseEntity<>(null,HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity<>(createdUser, HttpStatus.OK);
+        UserDTO userDTO = new UserDTO(createdUser);
+
+        return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
 //    @PostMapping

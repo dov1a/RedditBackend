@@ -1,5 +1,6 @@
 package com.example.demo.service.implementation;
 
+import com.example.demo.dto.UserDTO;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
@@ -30,6 +31,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.getById(id);
     }
 
+    @Override
+    public User logIn(String username, String password) {
+        Optional<User> user = userRepository.findUserByUsernameAndPassword(username, password);
+        if (!user.isEmpty()) {
+            return user.get();
+        }
+        return null;
+    }
+
 
     @Override
     public List<User> findAll() {
@@ -39,6 +49,28 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) {
         return null;
+    }
+
+    @Override
+    public User createUser(UserDTO userDTO) {
+        Optional<User> user = userRepository.findFirstByUsername(userDTO.getUsername());
+
+        if(user.isPresent()){
+            return null;
+        }
+
+        User newUser = new User();
+        newUser.setUsername(userDTO.getUsername());
+        newUser.setPassword(userDTO.getPassword());
+        newUser.setEmail(userDTO.getEmail());
+        newUser.setAvatar(userDTO.getAvatar());
+        newUser.setRegistrationDate(userDTO.getRegistrationDate());
+        newUser.setDescription(userDTO.getDescription());
+        newUser.setDisplayName(userDTO.getDisplayName());
+        newUser.setUserType(userDTO.getUserType());
+        newUser = userRepository.save(newUser);
+
+        return newUser;
     }
 
     @Override
