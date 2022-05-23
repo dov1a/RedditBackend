@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.CommunityDTO;
+import com.example.demo.dto.UserDTO;
 import com.example.demo.model.Community;
+import com.example.demo.model.User;
 import com.example.demo.service.CommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,37 +35,41 @@ public class CommunityController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Community> create(@RequestBody Community community){
+    public ResponseEntity<CommunityDTO> create(@RequestBody CommunityDTO newCommunity){
 
-        Community createdCommunity = communityService.save(community);
+        Community createdCommunity = communityService.createCommunity(newCommunity);
+
         if(createdCommunity == null){
-            return new ResponseEntity<>(null,HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity<>(createdCommunity, HttpStatus.OK);
+        CommunityDTO communityDTO = new CommunityDTO(createdCommunity);
+
+        return new ResponseEntity<>(communityDTO, HttpStatus.CREATED);
     }
 
-//    @PostMapping
-//    public ResponseEntity<User> updateUser(@RequestBody User user){
-//
-//        User user1 = userService.findOne(user.getUsername());
-//
-//        if (user == null) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//
-//        user1.setUserId(user.getUserId());
-//        user1.setUsername(user.getUsername());
-//        user1.setPassword(user.getPassword());
-//        user1.setEmail(user.getEmail());
-//        user1.setAvatar(user.getAvatar());
-//        user1.setRegistrationDate(user.getRegistrationDate());
-//        user1.setDescription(user.getDescription());
-//        user1.setDisplayName(user.getDisplayName());
-//        user1.setUserType(user.getUserType());
-//
-//        user1 = userService.save(user1);
-//        return new ResponseEntity<>(new User(user1), HttpStatus.OK);
-//    }
+    @PutMapping(value = "/{id}", consumes = "application/json")
+    public ResponseEntity<CommunityDTO> updatePost(@RequestBody CommunityDTO communityDTO, @PathVariable("id") Integer id) {
+        Community community = communityService.getOneById(id);
+
+        if (community == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        community.setName(communityDTO.getName());
+        community.setDescription(communityDTO.getDescription());
+        community.setCreationDate(communityDTO.getCreationDate());
+        community.isSuspend(communityDTO.isSuspend());
+        community.setSuspendedReason(communityDTO.getSuspendedReason());
+        community.setPosts(communityDTO.getPosts());
+        community.setFlairs(communityDTO.getFlairs());
+        community.setModerator(communityDTO.getModeratorId());
+
+
+        community = communityService.save(community);
+
+        return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.OK);
+    }
+
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteCommmunity(@PathVariable Integer id) {

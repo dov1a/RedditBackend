@@ -1,23 +1,41 @@
 package com.example.demo.dto;
 
-import lombok.Data;
+import com.example.demo.model.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class CommunityDTO implements Serializable {
-    private final int communityId;
-    private final String name;
-    private final String description;
-    private final LocalDate creationDate;
-    private final boolean isSuspend;
-    private final String suspendedReason;
-    private final Set<FlairDTO> flairs;
-    private final Set<RuleDTO> rules;
-    private final Set<PostDTO> posts;
-    private final Set<BannedDTO> banned;
-    private final Set<UserDTO> users;
-    private final UserDTO moderator;
+    private int communityId;
+    private String name;
+    private String description;
+    private LocalDate creationDate;
+    private boolean isSuspend;
+    private String suspendedReason;
+    private Set<Flair> flairs;
+    private Set<Rule> rules;
+    private Set<Post> posts;
+    private Set<Banned> banned;
+    private Set<User> users;
+    private User moderatorId;
+
+    public CommunityDTO(Community createdCommunity) {
+        this.communityId = createdCommunity.getCommunityId();
+        this.name = createdCommunity.getName();
+        this.description = createdCommunity.getDescription();
+        this.creationDate = createdCommunity.getCreationDate();
+        this.isSuspend = createdCommunity.isSuspend();
+        this.suspendedReason = createdCommunity.getSuspendedReason();
+        this.moderatorId = createdCommunity.getModerator();
+    }
+
+
 }

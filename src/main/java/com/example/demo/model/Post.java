@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +15,6 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor
 public class Post {
 
     @Id
@@ -34,17 +34,22 @@ public class Post {
     @Column(name = "imagePath")
     private String imagePath;
 
+    //BACA GRESKU
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "community_id")
     private Community community;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+
     @OneToMany(cascade = {ALL}, fetch = LAZY)
     @JoinColumn(name = "reaction_id")
     private Set<Reaction> reactions;
+
 
     @OneToMany(cascade = {ALL}, fetch = LAZY)
     @JoinColumn(name = "comment_id")
@@ -54,15 +59,26 @@ public class Post {
     @JoinColumn(name = "report_id")
     private Set<Report> reports;
 
+
     @ManyToOne
     @JoinColumn(name = "flair_id")
     private Flair flairs;
 
+    public Post(int postId, String title, String text, LocalDate creationDate, String imagePath, Community community, User user, Flair flairs) {
+        this.postId = postId;
+        this.title = title;
+        this.text = text;
+        this.creationDate = creationDate;
+        this.imagePath = imagePath;
+        this.community = community;
+        this.user = user;
+        this.flairs = flairs;
+    }
 
 
 
+    public Post(){
 
-
-
+    }
 
 }

@@ -1,11 +1,14 @@
 package com.example.demo.service.implementation;
 
+import com.example.demo.dto.PostDTO;
 import com.example.demo.model.Post;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.service.PostService;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +18,17 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Override
-    public Optional<Post> findOne(int id) {
+    public Optional<Post> findOne(Integer id) {
         return postRepository.findById(id);
+    }
+
+    @Override
+    public Post getOne(Integer id) {
+        return postRepository.getById(id);
     }
 
     @Override
@@ -32,6 +43,28 @@ public class PostServiceImpl implements PostService {
         }catch (IllegalArgumentException e){
             return null;
         }
+    }
+
+    @Override
+    public Post createPost(PostDTO postDTO) {
+        Optional<Post> post = postRepository.findById(postDTO.getPostId());
+
+        if(post.isPresent()){
+            return null;
+        }
+
+        Post newPost = new Post();
+        newPost.setTitle(postDTO.getTitle());
+        newPost.setText(postDTO.getText());
+        newPost.setCreationDate(LocalDate.now());
+        newPost.setImagePath(postDTO.getImagePath());
+        newPost.setCommunity(postDTO.getCommunity());
+        newPost.setUser(postDTO.getUser());
+        newPost.setFlairs(postDTO.getFlairs());
+
+        newPost = postRepository.save(newPost);
+
+        return newPost;
     }
 
     @Override

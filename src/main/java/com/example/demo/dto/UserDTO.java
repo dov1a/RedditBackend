@@ -1,6 +1,8 @@
 package com.example.demo.dto;
 
+import com.example.demo.enums.Roles;
 import com.example.demo.model.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +24,7 @@ public class UserDTO implements Serializable {
     private LocalDate registrationDate;
     private String description;
     private String displayName;
-    private String userType;
+    private Roles roles;
 
     public UserDTO(User createdUser) {
         this.userId = createdUser.getUserId();
@@ -30,10 +32,9 @@ public class UserDTO implements Serializable {
         this.password = createdUser.getPassword();
         this.email = createdUser.getEmail();
         this.avatar = createdUser.getAvatar();
-        this.registrationDate = createdUser.getRegistrationDate();
         this.description = createdUser.getDescription();
         this.displayName = createdUser.getDisplayName();
-        this.userType = createdUser.getUserType();
+        this.roles = createdUser.getRoles();
     }
 
 }

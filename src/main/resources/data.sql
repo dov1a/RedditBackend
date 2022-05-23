@@ -1,11 +1,11 @@
-INSERT INTO users (username, password, email, avatar, registration_date, description, display_name, user_type)
-VALUES ('dovla', 'dovla123', 'dovla123@gmail.com', NULL, '2022-05-18', 'Ja sam Vladimir', 'Vladimir Djurdjevic', 'admin');
+INSERT INTO users (username, password, email, avatar, registration_date, description, display_name, roles)
+VALUES ('dovla', '$2a$10$2mcfr5xM9EcXBIHPqGnTPuGFI4t/jf9Ek9Or5i5EB55vCDxlCi0OG', 'dovla123@gmail.com', NULL, '2022-05-18', 'Ja sam Vladimir', 'Vladimir Djurdjevic', 'ADMIN');
 
-INSERT INTO users (username, password, email, avatar, registration_date, description, display_name, user_type)
-VALUES ('petrex', 'petrex123', 'petrex123@gmail.com', NULL, '2022-05-18', 'Ja sam Petar', 'Petar Petrovic', 'user');
+INSERT INTO users (username, password, email, avatar, registration_date, description, display_name, roles)
+VALUES ('petrex', '$2a$10$qwsmCybN3dnYPHs/ximqLO1rGCRfxEx6jdfDhEAENz7n32TEaNqpe', 'petrex123@gmail.com', NULL, '2022-05-18', 'Ja sam Petar', 'Petar Petrovic', 'USER');
 
-INSERT INTO users (username, password, email, avatar, registration_date, description, display_name, user_type)
-VALUES ('ogi', 'ogi123', 'ogi123@gmail.com', NULL, '2022-05-18', 'Ja sam Ognjen', 'Ognjen Lazic', 'moderator');
+INSERT INTO users (username, password, email, avatar, registration_date, description, display_name, roles)
+VALUES ('ogi', '$2a$10$M49QzM7qj5wXlALOJgk9c.RHdZ3J8q7C/RuNgkxleSwVzSMWEQDQq', 'ogi123@gmail.com', NULL, '2022-05-18', 'Ja sam Ognjen', 'Ognjen Lazic', 'MODERATOR');
 
 INSERT INTO post (title, text, creation_date, image_path, community_id, user_id, flair_id)
             VALUES('Naslov objave 1', 'Text objave 1', '2022-05-18', NULL, 1, 2, Null);

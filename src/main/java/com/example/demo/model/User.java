@@ -1,9 +1,11 @@
 package com.example.demo.model;
 
 
+import com.example.demo.enums.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
+import javax.management.relation.Role;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
@@ -43,8 +45,9 @@ public class User {
     @Column(name = "displayName", unique = false, nullable = false)
     private String displayName;
 
-    @Column(name = "userType", unique = false, nullable = false)
-    private String userType;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Roles roles;
 
     @JsonIgnore
     @ManyToMany
@@ -71,12 +74,14 @@ public class User {
     @Column(name = "banned_id")
     private Set<Banned> banned;
 
+
+
 //    @OneToOne
 //    @JoinColumn(name = "community_id", unique = false, nullable = false)
 //    private Community moderatesCommunity;
 
 
-    public User(int userId, String username, String password, String email, String avatar, LocalDate registrationDate, String description, String displayName, String userType) {
+    public User(int userId, String username, String password, String email, String avatar, LocalDate registrationDate, String description, String displayName, Roles roles) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -85,7 +90,7 @@ public class User {
         this.registrationDate = registrationDate;
         this.description = description;
         this.displayName = displayName;
-        this.userType = userType;
+        this.roles = roles;
     }
 
     public User(){
@@ -158,11 +163,5 @@ public class User {
         this.displayName = displayName;
     }
 
-    public String getUserType() {
-        return userType;
-    }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
 }

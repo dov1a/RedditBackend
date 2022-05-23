@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.PostDTO;
 import com.example.demo.model.Post;
 import com.example.demo.service.PostService;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +19,19 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping
     public ResponseEntity<List<Post>> findAll(){
         return new ResponseEntity<>(postService.findAll(), HttpStatus.OK);
     };
 
+
     @GetMapping("/{id}")
     public ResponseEntity<Post> getOne(@PathVariable("id") Integer id){
         Optional<Post> posts = postService.findOne(id);
+
         if(!posts.isPresent()){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -32,37 +39,18 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Post> create(@RequestBody Post post){
+    public ResponseEntity<PostDTO> create(@RequestBody PostDTO newPost){
 
-        Post createdPost= postService.save(post);
+        Post createdPost = postService.createPost(newPost);
+
         if(createdPost == null){
-            return new ResponseEntity<>(null,HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity<>(createdPost, HttpStatus.OK);
+        PostDTO postDTO = new PostDTO(createdPost);
+
+        return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
     }
 
-//    @PostMapping
-//    public ResponseEntity<User> updateUser(@RequestBody User user){
-//
-//        User user1 = userService.findOne(user.getUsername());
-//
-//        if (user == null) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//
-//        user1.setUserId(user.getUserId());
-//        user1.setUsername(user.getUsername());
-//        user1.setPassword(user.getPassword());
-//        user1.setEmail(user.getEmail());
-//        user1.setAvatar(user.getAvatar());
-//        user1.setRegistrationDate(user.getRegistrationDate());
-//        user1.setDescription(user.getDescription());
-//        user1.setDisplayName(user.getDisplayName());
-//        user1.setUserType(user.getUserType());
-//
-//        user1 = userService.save(user1);
-//        return new ResponseEntity<>(new User(user1), HttpStatus.OK);
-//    }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Integer id) {
@@ -75,6 +63,31 @@ public class PostController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PutMapping(value = "/{id}", consumes = "application/json")
+    public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable("id") Integer id) {
+        Post post = postService.getOne(id);
+
+        if (post == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        post.setTitle(postDTO.getTitle());
+        post.setText(postDTO.getText());
+        post.setCreationDate(postDTO.getCreationDate());
+        post.setImagePath(postDTO.getImagePath());
+        post.setCommunity(postDTO.getCommunity());
+        post.setUser(postDTO.getUser());
+        post.setReactions(postDTO.getReactions());
+        post.setComments(postDTO.getComments());
+        post.setReports(postDTO.getReports());
+        post.setFlairs(postDTO.getFlairs());
+
+
+        post = postService.save(post);
+
+        return new ResponseEntity<>(new PostDTO(post), HttpStatus.OK);
     }
 
 }

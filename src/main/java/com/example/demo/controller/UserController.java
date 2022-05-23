@@ -1,14 +1,27 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.UserDTO;
+import com.example.demo.dto.*;
+import com.example.demo.model.Post;
 import com.example.demo.model.User;
+import com.example.demo.security.TokenUtils;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +30,23 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    UserService userService;
 
-    @GetMapping("/getAll")
+    @Autowired
+    UserDetailsService userDetailsService;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+
+
+    @Autowired
+    TokenUtils tokenUtils;
+
+    @GetMapping
     public ResponseEntity<List<User>> findAll(){
       return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     };
@@ -47,28 +74,21 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
-//    @PostMapping
-//    public ResponseEntity<User> updateUser(@RequestBody User user){
-//
-//        User user1 = userService.findOne(user.getUsername());
-//
-//        if (user == null) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @PutMapping(value = "/{id}", consumes = "application/json")
+    public ResponseEntity<Void> changePassword(@RequestBody @Validated ResetPasswordDTO resetPasswordDTO, @PathVariable("id") Integer id){
+        User user = userService.findOneById(id);
+
+
+//        if (!passwordEncoder.encode(resetPasswordDTO.getOldPassword()).equals(user.getPassword())){
+//            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
 //        }
-//
-//        user1.setUserId(user.getUserId());
-//        user1.setUsername(user.getUsername());
-//        user1.setPassword(user.getPassword());
-//        user1.setEmail(user.getEmail());
-//        user1.setAvatar(user.getAvatar());
-//        user1.setRegistrationDate(user.getRegistrationDate());
-//        user1.setDescription(user.getDescription());
-//        user1.setDisplayName(user.getDisplayName());
-//        user1.setUserType(user.getUserType());
-//
-//        user1 = userService.save(user1);
-//        return new ResponseEntity<>(new User(user1), HttpStatus.OK);
-//    }
+
+        user.setPassword(passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
+        user = userService.save(user);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
@@ -82,6 +102,31 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserTokenState> createAuthenticationToken(
+            @RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) {
+
+        System.out.println("username" + authenticationRequest.getUsername());
+        System.out.println("password" + authenticationRequest.getPassword());
+
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                authenticationRequest.getUsername(), authenticationRequest.getPassword()));
+
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+        UserDetails user = (UserDetails) authentication.getPrincipal();
+        String jwt = tokenUtils.generateToken(user);
+        int expiresIn = tokenUtils.getExpiredIn();
+
+
+
+        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+    }
+
+
 
 
 }

@@ -1,12 +1,15 @@
 package com.example.demo.service.implementation;
 
 import com.example.demo.dto.UserDTO;
+import com.example.demo.enums.Roles;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +18,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public User findOne(String username) {
@@ -43,12 +49,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        return null;
+        return this.userRepository.findAll();
     }
 
     @Override
     public User save(User user) {
-        return null;
+
+        try{
+            return userRepository.save(user);
+        }catch (IllegalArgumentException e){
+            return null;
+        }
     }
 
     @Override
@@ -61,13 +72,13 @@ public class UserServiceImpl implements UserService {
 
         User newUser = new User();
         newUser.setUsername(userDTO.getUsername());
-        newUser.setPassword(userDTO.getPassword());
+        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         newUser.setEmail(userDTO.getEmail());
         newUser.setAvatar(userDTO.getAvatar());
-        newUser.setRegistrationDate(userDTO.getRegistrationDate());
+        newUser.setRegistrationDate(LocalDate.now());
         newUser.setDescription(userDTO.getDescription());
         newUser.setDisplayName(userDTO.getDisplayName());
-        newUser.setUserType(userDTO.getUserType());
+        newUser.setRoles(Roles.USER);
         newUser = userRepository.save(newUser);
 
         return newUser;
