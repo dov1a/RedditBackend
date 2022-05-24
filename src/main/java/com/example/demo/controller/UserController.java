@@ -41,6 +41,9 @@ public class UserController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
 
     @Autowired
@@ -78,15 +81,26 @@ public class UserController {
     public ResponseEntity<Void> changePassword(@RequestBody @Validated ResetPasswordDTO resetPasswordDTO, @PathVariable("id") Integer id){
         User user = userService.findOneById(id);
 
+        String petrex = "petrex123";
 
 //        if (!passwordEncoder.encode(resetPasswordDTO.getOldPassword()).equals(user.getPassword())){
 //            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
 //        }
 
-        user.setPassword(passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
-        user = userService.save(user);
+        String test = passwordEncoder.encode(petrex);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        System.out.println("JESU LI JEDNAKO " + passwordEncoder.matches(resetPasswordDTO.getOldPassword(), user.getPassword()));
+
+
+        if (passwordEncoder.matches(resetPasswordDTO.getOldPassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
+            user = userService.save(user);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+
     }
 
 

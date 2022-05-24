@@ -3,8 +3,10 @@ package com.example.demo.controller;
 import com.example.demo.dto.CommunityDTO;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.model.Community;
+import com.example.demo.model.Post;
 import com.example.demo.model.User;
 import com.example.demo.service.CommunityService;
+import com.example.demo.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "api/communities")
@@ -19,6 +22,11 @@ public class CommunityController {
 
     @Autowired
     private CommunityService communityService;
+
+    @Autowired
+    private PostService postService;
+
+
 
     @GetMapping
     public ResponseEntity<List<Community>> findAll(){
@@ -62,7 +70,7 @@ public class CommunityController {
         community.setSuspendedReason(communityDTO.getSuspendedReason());
         community.setPosts(communityDTO.getPosts());
         community.setFlairs(communityDTO.getFlairs());
-        community.setModerator(communityDTO.getModeratorId());
+        community.setModerator(communityDTO.getModerator());
 
 
         community = communityService.save(community);
@@ -74,10 +82,27 @@ public class CommunityController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteCommmunity(@PathVariable Integer id) {
 
+
         Optional<Community> community = communityService.findOne(id);
 
+        Set<Post> communityPosts = community.get().getPosts();
+
+
+
+
+
+
+
         if (community != null) {
-            communityService.delete(id);
+
+//            for (Post post : communityPosts)
+//            {
+//
+//                PostController postController = new PostController();
+//                postController.deletePost(post.getPostId());
+//            }
+
+            communityService.delete(community.get().getCommunityId());
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

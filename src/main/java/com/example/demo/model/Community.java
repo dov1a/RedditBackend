@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -38,18 +37,18 @@ public class Community {
     private String  suspendedReason;
 
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = LAZY)
     @JoinColumn(name = "flair_id")
     private Set<Flair> flairs;
 
     //BACA GRESKU
     @JsonIgnore
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = LAZY)
     @JoinColumn(name = "rule_id")
     private Set<Rule> rules;
 
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = LAZY)
     @JoinColumn(name = "post_id")
     private Set<Post> posts;
 
