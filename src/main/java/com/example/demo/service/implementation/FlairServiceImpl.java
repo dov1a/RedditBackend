@@ -1,5 +1,6 @@
 package com.example.demo.service.implementation;
 
+import com.example.demo.dto.FlairDTO;
 import com.example.demo.model.Flair;
 import com.example.demo.repository.FlairRepository;
 import com.example.demo.service.FlairService;
@@ -21,8 +22,18 @@ public class FlairServiceImpl implements FlairService {
     }
 
     @Override
+    public Flair getOne(int id) {
+        return flairRepository.getById(id);
+    }
+
+    @Override
     public List<Flair> findAll() {
         return flairRepository.findAll();
+    }
+
+    @Override
+    public Flair createFlair(FlairDTO flairDTO) {
+        return null;
     }
 
     @Override

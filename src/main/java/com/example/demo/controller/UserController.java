@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.*;
+import com.example.demo.enums.Roles;
 import com.example.demo.model.Post;
 import com.example.demo.model.User;
 import com.example.demo.security.TokenUtils;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,8 +46,6 @@ public class UserController {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
-
     @Autowired
     TokenUtils tokenUtils;
 
@@ -62,6 +62,43 @@ public class UserController {
         }
         return new ResponseEntity<>(users.get(), HttpStatus.OK);
     }
+
+    @GetMapping("/byId/{id}")
+    public ResponseEntity<User> getOneById(@PathVariable("id") int id){
+        User user = userService.findOneById(id);
+//        if(!user.isP){
+//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/onlyUser")
+    public ResponseEntity<List<User>> findAllUser(){
+
+        List<User> allUsers = userService.findAll();
+        List<User> user = new ArrayList<>();
+        for (User user1 : allUsers){
+            if (user1.getRoles() == Roles.USER){
+                user.add(user1);
+            }
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    };
+
+    @GetMapping("/onlyModerators")
+    public ResponseEntity<List<User>> findAllModerators(){
+
+        List<User> allUsers = userService.findAll();
+        List<User> user = new ArrayList<>();
+        for (User user1 : allUsers){
+            if (user1.getRoles() == Roles.MODERATOR){
+                user.add(user1);
+            }
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    };
 
 
     @PostMapping("/create")
@@ -80,17 +117,6 @@ public class UserController {
     @PutMapping(value = "/{id}", consumes = "application/json")
     public ResponseEntity<Void> changePassword(@RequestBody @Validated ResetPasswordDTO resetPasswordDTO, @PathVariable("id") Integer id){
         User user = userService.findOneById(id);
-
-        String petrex = "petrex123";
-
-//        if (!passwordEncoder.encode(resetPasswordDTO.getOldPassword()).equals(user.getPassword())){
-//            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
-//        }
-
-        String test = passwordEncoder.encode(petrex);
-
-        System.out.println("JESU LI JEDNAKO " + passwordEncoder.matches(resetPasswordDTO.getOldPassword(), user.getPassword()));
-
 
         if (passwordEncoder.matches(resetPasswordDTO.getOldPassword(), user.getPassword())){
             user.setPassword(passwordEncoder.encode(resetPasswordDTO.getNewPassword()));

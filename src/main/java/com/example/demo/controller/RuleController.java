@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.PostDTO;
+import com.example.demo.dto.RuleDTO;
 import com.example.demo.model.Community;
+import com.example.demo.model.Post;
 import com.example.demo.model.Rule;
 import com.example.demo.service.CommunityService;
 import com.example.demo.service.RuleService;
@@ -9,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,52 +23,60 @@ public class RuleController {
     @Autowired
     private RuleService ruleService;
 
+    @Autowired
+    private CommunityService communityService;
+
     @GetMapping
-    public ResponseEntity<List<Rule>> findAll(){
-        return new ResponseEntity<>(ruleService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<RuleDTO>> findAll(){
+        List<Rule> rules = ruleService.findAll();
+        List<RuleDTO> ruleDTOS = new ArrayList<>();
+        for (Rule rule : rules){
+            ruleDTOS.add(new RuleDTO(rule));
+        }
+
+        return new ResponseEntity<>(ruleDTOS, HttpStatus.OK);
     };
 
     @GetMapping("/{id}")
-    public ResponseEntity<Rule> getOne(@PathVariable("id") Integer id){
-        Optional<Rule> rule = ruleService.findOne(id);
-        if(!rule.isPresent()){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(rule.get(), HttpStatus.OK);
+    public ResponseEntity<RuleDTO> getOne(@PathVariable("id") Integer id){
+        Rule rule = ruleService.getOne(id);
+
+        RuleDTO ruleDTO = new RuleDTO(rule);
+
+//        if(po){
+//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//        }
+        return new ResponseEntity<>(ruleDTO, HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Rule> create(@RequestBody Rule rule){
+    public ResponseEntity<RuleDTO> create(@RequestBody RuleDTO newRule){
 
-        Rule createdRule = ruleService.save(rule);
+        Rule createdRule = ruleService.createRule(newRule);
+
         if(createdRule == null){
-            return new ResponseEntity<>(null,HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity<>(createdRule, HttpStatus.OK);
+        RuleDTO ruleDTO = new RuleDTO(createdRule);
+
+        return new ResponseEntity<>(ruleDTO, HttpStatus.CREATED);
     }
 
-//    @PostMapping
-//    public ResponseEntity<User> updateUser(@RequestBody User user){
-//
-//        User user1 = userService.findOne(user.getUsername());
-//
-//        if (user == null) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//
-//        user1.setUserId(user.getUserId());
-//        user1.setUsername(user.getUsername());
-//        user1.setPassword(user.getPassword());
-//        user1.setEmail(user.getEmail());
-//        user1.setAvatar(user.getAvatar());
-//        user1.setRegistrationDate(user.getRegistrationDate());
-//        user1.setDescription(user.getDescription());
-//        user1.setDisplayName(user.getDisplayName());
-//        user1.setUserType(user.getUserType());
-//
-//        user1 = userService.save(user1);
-//        return new ResponseEntity<>(new User(user1), HttpStatus.OK);
-//    }
+    @PutMapping(value = "/{id}", consumes = "application/json")
+    public ResponseEntity<RuleDTO> update(@RequestBody RuleDTO ruleDTO, @PathVariable("id") Integer id) {
+        Rule rule = ruleService.getOne(id);
+
+        if (rule == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        rule.setDescription(ruleDTO.getDescription());
+        rule.setCommunity(communityService.getOneById(rule.getCommunity().getCommunityId()));
+
+        rule = ruleService.save(rule);
+
+        return new ResponseEntity<>(new RuleDTO(rule), HttpStatus.OK);
+    }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteRule(@PathVariable Integer id) {

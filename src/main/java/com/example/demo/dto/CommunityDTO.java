@@ -25,7 +25,7 @@ public class CommunityDTO implements Serializable {
     private Set<Post> posts;
     private Set<Banned> banned;
     private Set<User> users;
-    private User moderator;
+    private int moderator;
 
     public CommunityDTO(Community createdCommunity) {
         this.communityId = createdCommunity.getCommunityId();
@@ -34,7 +34,7 @@ public class CommunityDTO implements Serializable {
         this.creationDate = createdCommunity.getCreationDate();
         this.isSuspend = createdCommunity.isSuspend();
         this.suspendedReason = createdCommunity.getSuspendedReason();
-        this.moderator = createdCommunity.getModerator();
+        this.moderator = createdCommunity.getModerator().getUserId();
     }
 
 

@@ -1,5 +1,8 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.PostDTO;
+import com.example.demo.dto.RuleDTO;
+import com.example.demo.model.Post;
 import com.example.demo.model.Reaction;
 import com.example.demo.model.Rule;
 
@@ -10,6 +13,8 @@ public interface RuleService {
 
     Optional<Rule> findOne(int id);
     List<Rule> findAll();
+    Rule getOne(int id);
+    Rule createRule(RuleDTO ruleDTO);
     Rule save(Rule rule);
     void delete(int id);
 

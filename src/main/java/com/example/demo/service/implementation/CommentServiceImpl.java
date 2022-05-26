@@ -1,5 +1,6 @@
 package com.example.demo.service.implementation;
 
+import com.example.demo.dto.CommentDTO;
 import com.example.demo.model.Comment;
 import com.example.demo.repository.CommentRepository;
 import com.example.demo.service.CommentService;
@@ -21,8 +22,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public Comment getOne(int id) {
+        return commentRepository.getById(id);
+    }
+
+    @Override
     public List<Comment> findAll() {
         return commentRepository.findAll();
+    }
+
+    @Override
+    public Comment createComment(CommentDTO commentDTO) {
+        return null;
     }
 
     @Override

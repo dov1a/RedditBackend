@@ -1,5 +1,6 @@
 package com.example.demo.service.implementation;
 
+import com.example.demo.dto.ReportDTO;
 import com.example.demo.model.Reaction;
 import com.example.demo.model.Report;
 import com.example.demo.repository.ReportRepository;
@@ -19,6 +20,16 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public Optional<Report> findOne(int id) {
         return reportRepository.findById(id);
+    }
+
+    @Override
+    public Report getOne(int id) {
+        return reportRepository.getById(id);
+    }
+
+    @Override
+    public Report createReport(ReportDTO reportDTO) {
+        return null;
     }
 
     @Override

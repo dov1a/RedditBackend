@@ -1,5 +1,6 @@
 package com.example.demo.service.implementation;
 
+import com.example.demo.dto.ReactionDTO;
 import com.example.demo.model.Reaction;
 import com.example.demo.repository.ReactionRepository;
 import com.example.demo.service.ReactionService;
@@ -18,6 +19,16 @@ public class ReactionServiceImpl implements ReactionService {
     @Override
     public Optional<Reaction> findOne(int id) {
         return reactionRepository.findById(id);
+    }
+
+    @Override
+    public Reaction getOne(int id) {
+        return reactionRepository.getById(id);
+    }
+
+    @Override
+    public Reaction createReaction(ReactionDTO reactionDTO) {
+        return null;
     }
 
     @Override

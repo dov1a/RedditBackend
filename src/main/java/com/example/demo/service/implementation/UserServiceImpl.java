@@ -33,16 +33,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findOneById(Integer id) {
-
-        return userRepository.getById(id);
-    }
-
-    @Override
-    public User logIn(String username, String password) {
-        Optional<User> user = userRepository.findUserByUsernameAndPassword(username, password);
-        if (!user.isEmpty()) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
             return user.get();
         }
+
         return null;
     }
 

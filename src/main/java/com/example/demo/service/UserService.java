@@ -10,7 +10,6 @@ public interface UserService {
 
     User findOne(String username);
     User findOneById(Integer id);
-    User logIn(String username, String password);
     List<User> findAll();
     User save(User user);
 

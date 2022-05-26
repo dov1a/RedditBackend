@@ -11,4 +11,7 @@ public class FlairDTO implements Serializable {
     private final String name;
     private final Set<CommunityDTO> communities;
     private final Set<PostDTO> posts;
+
+
+
 }

@@ -1,17 +1,20 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.CommunityDTO;
+import com.example.demo.dto.PostDTO;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.model.Community;
 import com.example.demo.model.Post;
 import com.example.demo.model.User;
 import com.example.demo.service.CommunityService;
 import com.example.demo.service.PostService;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,11 +29,21 @@ public class CommunityController {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private UserService userService;
+
 
 
     @GetMapping
-    public ResponseEntity<List<Community>> findAll(){
-        return new ResponseEntity<>(communityService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<CommunityDTO>> findAll(){
+
+        List<Community> communities = communityService.findAll();
+        List<CommunityDTO> communityDTOS = new ArrayList<>();
+        for (Community community : communities){
+            communityDTOS.add(new CommunityDTO(community));
+        }
+
+        return new ResponseEntity<>(communityDTOS, HttpStatus.OK);
     };
 
     @GetMapping("/{id}")
@@ -70,7 +83,7 @@ public class CommunityController {
         community.setSuspendedReason(communityDTO.getSuspendedReason());
         community.setPosts(communityDTO.getPosts());
         community.setFlairs(communityDTO.getFlairs());
-        community.setModerator(communityDTO.getModerator());
+        community.setModerator(userService.findOneById(community.getModerator().getUserId()));
 
 
         community = communityService.save(community);
@@ -86,10 +99,6 @@ public class CommunityController {
         Optional<Community> community = communityService.findOne(id);
 
         Set<Post> communityPosts = community.get().getPosts();
-
-
-
-
 
 
 

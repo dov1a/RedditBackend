@@ -4,6 +4,7 @@ import com.example.demo.dto.CommunityDTO;
 import com.example.demo.model.Community;
 import com.example.demo.repository.CommunityRepository;
 import com.example.demo.service.CommunityService;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Autowired
     private CommunityRepository communityRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public Optional<Community> findOne(int id) {
@@ -55,7 +59,7 @@ public class CommunityServiceImpl implements CommunityService {
         newCommunity.setCreationDate(LocalDate.now());
         newCommunity.isSuspend(false);
         newCommunity.setSuspendedReason(null);
-        newCommunity.setModerator(communityDTO.getModerator());
+        newCommunity.setModerator(userService.findOneById(community.get().getModerator().getUserId()));
 
         newCommunity = communityRepository.save(newCommunity);
 

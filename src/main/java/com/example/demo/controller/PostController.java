@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.PostDTO;
-import com.example.demo.model.Post;
+import com.example.demo.model.*;
+import com.example.demo.service.CommunityService;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "api/posts")
@@ -22,20 +26,33 @@ public class PostController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CommunityService communityService;
+
+
     @GetMapping
-    public ResponseEntity<List<Post>> findAll(){
-        return new ResponseEntity<>(postService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<PostDTO>> findAll(){
+
+        List<Post> posts = postService.findAll();
+        List<PostDTO> postDTOS = new ArrayList<>();
+        for (Post post : posts){
+            postDTOS.add(new PostDTO(post));
+        }
+
+        return new ResponseEntity<>(postDTOS, HttpStatus.OK);
     };
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Post> getOne(@PathVariable("id") Integer id){
-        Optional<Post> posts = postService.findOne(id);
+    public ResponseEntity<PostDTO> getOne(@PathVariable("id") Integer id){
+        Post posts = postService.getOne(id);
 
-        if(!posts.isPresent()){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(posts.get(), HttpStatus.OK);
+        PostDTO postDTO = new PostDTO(posts);
+
+//        if(po){
+//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//        }
+        return new ResponseEntity<>(postDTO, HttpStatus.OK);
     }
 
     @PostMapping("/create")
@@ -77,8 +94,8 @@ public class PostController {
         post.setText(postDTO.getText());
         post.setCreationDate(postDTO.getCreationDate());
         post.setImagePath(postDTO.getImagePath());
-        post.setCommunity(postDTO.getCommunity());
-        post.setUser(postDTO.getUser());
+        post.setCommunity(communityService.getOneById(post.getCommunity().getCommunityId()));
+        post.setUser(userService.findOneById(post.getUser().getUserId()));
         post.setReactions(postDTO.getReactions());
         post.setComments(postDTO.getComments());
         post.setReports(postDTO.getReports());

@@ -1,16 +1,19 @@
 package com.example.demo.service.implementation;
 
 import com.example.demo.dto.PostDTO;
-import com.example.demo.model.Post;
+import com.example.demo.model.*;
 import com.example.demo.repository.PostRepository;
+import com.example.demo.service.CommunityService;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -20,6 +23,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CommunityService communityService;
 
     @Override
     public Optional<Post> findOne(Integer id) {
@@ -50,16 +56,19 @@ public class PostServiceImpl implements PostService {
         Optional<Post> post = postRepository.findById(postDTO.getPostId());
 
         if(post.isPresent()){
+            System.out.println("USAO U NUL ____________________________________________________________________________________________________________");
             return null;
         }
+
+        System.out.println("ID: " + postDTO.getPostId());
 
         Post newPost = new Post();
         newPost.setTitle(postDTO.getTitle());
         newPost.setText(postDTO.getText());
         newPost.setCreationDate(LocalDate.now());
         newPost.setImagePath(postDTO.getImagePath());
-        newPost.setCommunity(postDTO.getCommunity());
-        newPost.setUser(postDTO.getUser());
+        newPost.setCommunity(communityService.getOneById(postDTO.getCommunity()));
+        newPost.setUser(userService.findOneById(postDTO.getUser()));
         newPost.setFlairs(postDTO.getFlairs());
 
         newPost = postRepository.save(newPost);
