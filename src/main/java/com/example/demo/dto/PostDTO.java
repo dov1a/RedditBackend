@@ -1,7 +1,6 @@
 package com.example.demo.dto;
 
 import com.example.demo.model.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +20,7 @@ public class PostDTO implements Serializable {
     private String imagePath;
     private int community;
     private int user;
-    private Set<Reaction> reactions;
+    private int reactions;
     private Set<Comment> comments;
     private Set<Report> reports;
     private Flair flairs;
@@ -36,7 +35,5 @@ public class PostDTO implements Serializable {
         this.user = createdPost.getUser().getUserId();
         this.flairs = createdPost.getFlairs();
     }
-
-
 
 }

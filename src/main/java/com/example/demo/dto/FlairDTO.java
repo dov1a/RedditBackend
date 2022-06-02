@@ -9,8 +9,8 @@ import java.util.Set;
 public class FlairDTO implements Serializable {
     private final int flairId;
     private final String name;
-    private final Set<CommunityDTO> communities;
-    private final Set<PostDTO> posts;
+    private final int communityId;
+    private final int postId;
 
 
 

@@ -1,6 +1,5 @@
 package com.example.demo.dto;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +18,7 @@ public class CommentDTO implements Serializable {
     private boolean isDeleted;
     //private CommentDTO repliesTo;
     private Set<ReportDTO> reports;
-    private Set<ReactionDTO> reactions;
+    private Set<ReactionPostDTO> reactions;
     //private CommentDTO comment;
     private UserDTO user;
     private PostDTO post;

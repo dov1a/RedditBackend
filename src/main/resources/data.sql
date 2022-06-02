@@ -13,7 +13,34 @@
 -- INSERT INTO rule (description, community_id)
 --             VALUES('Rule number 1', 1);
 
-Update rule SET description='Rule number 1' where rule_id = 1;
+Update rule SET description='Rule number 1 community 1' where rule_id = 1;
+
+insert into reaction_post (timestamp, type, post_id, user_id) values ('2022-06-02', 3, 6, 2);
+
+-- INSERT INTO rule (description, community_id)
+--             VALUES('Rule number 2 community 1', 1);
+--
+-- INSERT INTO rule (description, community_id)
+--             VALUES('Rule number 3 community 1', 1);
+--
+-- INSERT INTO rule (description, community_id)
+--             VALUES('Rule number 4 community 1', 1);
+--
+-- INSERT INTO rule (description, community_id)
+--             VALUES('Rule number 5 community 1', 1);
+--
+--
+-- INSERT INTO rule (description, community_id)
+--             VALUES('Rule number 1 community 3', 3);
+--
+-- INSERT INTO rule (description, community_id)
+--             VALUES('Rule number 2 community 3', 3);
+--
+-- INSERT INTO rule (description, community_id)
+--             VALUES('Rule number 3 community 3', 3);
+--
+-- INSERT INTO rule (description, community_id)
+--             VALUES('Rule number 4 community 3', 3);
 
 -- INSERT INTO community (name, description, creation_date, is_suspend, suspended_reason, user_id)
 --                  VALUES('Community1', 'Description of community1', '2022-05-18', false, null, 2);

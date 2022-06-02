@@ -39,7 +39,7 @@ public class Comment {
 
     @OneToMany
     @JoinColumn(name = "reaction_id")
-    private Set<Reaction> reactions = new HashSet<>();
+    private Set<ReactionPost> reactions = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")

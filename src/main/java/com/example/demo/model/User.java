@@ -5,7 +5,6 @@ import com.example.demo.enums.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.management.relation.Role;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
@@ -67,7 +66,7 @@ public class User {
     @JsonIgnore
     @OneToMany
     @Column(name = "reaction_id", unique = false, nullable = false)
-    private Set<Reaction> reactions;
+    private Set<ReactionPost> reactions;
 
     @JsonIgnore
     @OneToMany

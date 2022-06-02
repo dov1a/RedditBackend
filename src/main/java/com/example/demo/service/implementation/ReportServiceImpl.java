@@ -1,7 +1,6 @@
 package com.example.demo.service.implementation;
 
 import com.example.demo.dto.ReportDTO;
-import com.example.demo.model.Reaction;
 import com.example.demo.model.Report;
 import com.example.demo.repository.ReportRepository;
 import com.example.demo.service.ReportService;

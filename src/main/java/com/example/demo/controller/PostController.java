@@ -4,6 +4,7 @@ import com.example.demo.dto.PostDTO;
 import com.example.demo.model.*;
 import com.example.demo.service.CommunityService;
 import com.example.demo.service.PostService;
+import com.example.demo.service.ReactionPostService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,16 +30,44 @@ public class PostController {
     @Autowired
     private CommunityService communityService;
 
+    @Autowired
+    private ReactionPostService reactionPostService;
+
 
     @GetMapping
     public ResponseEntity<List<PostDTO>> findAll(){
 
+
+
         List<Post> posts = postService.findAll();
         List<PostDTO> postDTOS = new ArrayList<>();
         for (Post post : posts){
+            int karma = reactionPostService.karma(post.getPostId());
+
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println("OVO JE KARMA OD OBJAVE " + post.getPostId() + "I VREDNOST JE " + karma  );
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             postDTOS.add(new PostDTO(post));
         }
 
+        return new ResponseEntity<>(postDTOS, HttpStatus.OK);
+    };
+
+    @GetMapping("/community/{communityId}")
+    public ResponseEntity<List<PostDTO>> getPostsByCommunity(@PathVariable("communityId") Integer id){
+
+        List<Post> posts = postService.findAll();
+        List<PostDTO> postDTOS = new ArrayList<>();
+        for (Post post : posts){
+            if(post.getCommunity().getCommunityId() == id){
+                postDTOS.add(new PostDTO(post));
+
+
+
+
+            }
+
+        }
         return new ResponseEntity<>(postDTOS, HttpStatus.OK);
     };
 

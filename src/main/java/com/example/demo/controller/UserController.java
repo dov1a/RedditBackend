@@ -153,15 +153,11 @@ public class UserController {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
 
         UserDetails user = (UserDetails) authentication.getPrincipal();
         String jwt = tokenUtils.generateToken(user);
         int expiresIn = tokenUtils.getExpiredIn();
-
-
 
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
     }

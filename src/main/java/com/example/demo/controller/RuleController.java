@@ -37,6 +37,20 @@ public class RuleController {
         return new ResponseEntity<>(ruleDTOS, HttpStatus.OK);
     };
 
+    @GetMapping("/community/{communityId}")
+    public ResponseEntity<List<RuleDTO>> getRuleByCommunity(@PathVariable("communityId") Integer id){
+
+        List<Rule> rules = ruleService.findAll();
+        List<RuleDTO> ruleDTOS = new ArrayList<>();
+        for (Rule rule : rules){
+            if(rule.getCommunity().getCommunityId() == id){
+                ruleDTOS.add(new RuleDTO(rule));
+            }
+        }
+
+        return new ResponseEntity<>(ruleDTOS, HttpStatus.OK);
+    };
+
     @GetMapping("/{id}")
     public ResponseEntity<RuleDTO> getOne(@PathVariable("id") Integer id){
         Rule rule = ruleService.getOne(id);

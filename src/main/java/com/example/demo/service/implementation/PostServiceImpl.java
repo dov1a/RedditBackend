@@ -56,7 +56,7 @@ public class PostServiceImpl implements PostService {
         Optional<Post> post = postRepository.findById(postDTO.getPostId());
 
         if(post.isPresent()){
-            System.out.println("USAO U NUL ____________________________________________________________________________________________________________");
+
             return null;
         }
 

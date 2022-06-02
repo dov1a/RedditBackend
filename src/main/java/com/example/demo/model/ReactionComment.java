@@ -1,7 +1,10 @@
 package com.example.demo.model;
 
 import com.example.demo.enums.ReactionType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,8 +14,7 @@ import java.time.LocalDate;
 @Setter
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor
-public class Reaction {
+public class ReactionComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,12 +32,10 @@ public class Reaction {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
-
-    @ManyToOne
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
+    public ReactionComment() {
 
+    }
 }

@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.PostDTO;
 import com.example.demo.dto.RuleDTO;
-import com.example.demo.model.Post;
-import com.example.demo.model.Reaction;
 import com.example.demo.model.Rule;
 
 import java.util.List;

@@ -46,11 +46,8 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-
-    @OneToMany(cascade = {ALL}, fetch = LAZY)
-    @JoinColumn(name = "reaction_id")
-    private Set<Reaction> reactions;
-
+    @Column(name = "reaction")
+    private int reactions;
 
     @OneToMany(cascade = {ALL}, fetch = LAZY)
     @JoinColumn(name = "comment_id")
@@ -75,8 +72,6 @@ public class Post {
         this.user = user;
         this.flairs = flairs;
     }
-
-
 
     public Post(){
 
