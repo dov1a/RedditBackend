@@ -79,5 +79,9 @@ public class ReactionPostServiceImpl implements ReactionPostService {
         reactionPostRepository.deleteById(id);
     }
 
+    @Override
+    public int karma(int postId) {
 
+    return 0;
+    }
 }

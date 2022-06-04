@@ -15,7 +15,7 @@
 
 Update rule SET description='Rule number 1 community 1' where rule_id = 1;
 
-insert into reaction_post (timestamp, type, post_id, user_id) values ('2022-06-02', 3, 6, 2);
+-- insert into reaction_post (timestamp, type, post_id, user_id) values ('2022-06-02', 3, 6, 2);
 
 -- INSERT INTO rule (description, community_id)
 --             VALUES('Rule number 2 community 1', 1);

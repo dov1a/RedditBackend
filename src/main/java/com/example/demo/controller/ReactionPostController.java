@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.KarmaDTO;
 import com.example.demo.dto.PostDTO;
 import com.example.demo.dto.ReactionPostDTO;
+import com.example.demo.enums.ReactionType;
 import com.example.demo.model.Post;
 import com.example.demo.model.ReactionPost;
 import com.example.demo.service.PostService;
@@ -29,27 +31,67 @@ public class ReactionPostController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/post/{postId}")
-    public ResponseEntity<List<ReactionPostDTO>> getPostsByCommunity(@PathVariable("postId") Integer id){
+    @GetMapping
+    public ResponseEntity<List<ReactionPostDTO>> findAll(){
+
+        //int karma = reactionPostService.karma(6);
+        //System.out.println("KARMA ZA POST " + 6 + " JE " + karma);
+
 
         List<ReactionPost> reactionPosts = reactionPostService.findAll();
         List<ReactionPostDTO> reactionPostDTOS = new ArrayList<>();
-        for (ReactionPost reaction : reactionPosts){
-            if(reaction.getPost().getPostId() == id){
-                reactionPostDTOS.add(new ReactionPostDTO(reaction));
-            }
-
+        for (ReactionPost reactionPost : reactionPosts){
+            reactionPostDTOS.add(new ReactionPostDTO(reactionPost));
         }
+
         return new ResponseEntity<>(reactionPostDTOS, HttpStatus.OK);
     };
 
-    
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<KarmaDTO> getPostKarma(@PathVariable("postId") Integer id){
+        KarmaDTO karmaDTO = new KarmaDTO();
+        karmaDTO.setKarma(0);
+        int upvote = 0;
+        int downvote = 0;
+
+        Post onePost = postService.getOne(id);
+        List<ReactionPost> reactionPostList = reactionPostService.findAll();
+        List<ReactionPost> onePostReaction = new ArrayList<>();
+
+
+
+        for (ReactionPost reactionPost : reactionPostList){
+            if (reactionPost.getPost().getPostId() == id){
+                onePostReaction.add(reactionPost);
+            }
+        }
+
+        for(ReactionPost reactionPost : onePostReaction){
+            if (reactionPost.getType() == ReactionType.UPVOTE){
+                upvote = upvote + 1;
+            }else if(reactionPost.getType() == ReactionType.DOWNVOTE){
+                downvote = downvote + 1;
+            }
+        }
+
+        karmaDTO.setKarma(upvote - downvote);
+
+
+        return new ResponseEntity<>(karmaDTO, HttpStatus.OK);
+    }
 
 
     @PostMapping("/create")
     public ResponseEntity<ReactionPostDTO> create(@RequestBody ReactionPostDTO newReaction){
 
+        System.out.println("=================================================================================");
+        System.out.println("REAKCIJA JE TIPA " + newReaction.getReactionType());
+        System.out.println("USER ID OD REAKCIJE JE " + newReaction.getUserId());
+
         ReactionPost createdReaction = reactionPostService.createReaction(newReaction);
+
+
+
 
         if(createdReaction == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);

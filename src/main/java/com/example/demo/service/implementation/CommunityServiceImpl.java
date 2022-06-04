@@ -59,7 +59,7 @@ public class CommunityServiceImpl implements CommunityService {
         newCommunity.setCreationDate(LocalDate.now());
         newCommunity.isSuspend(false);
         newCommunity.setSuspendedReason(null);
-        newCommunity.setModerator(userService.findOneById(community.get().getModerator().getUserId()));
+        newCommunity.setModerator(userService.findOneById(communityDTO.getModerator()));
 
         newCommunity = communityRepository.save(newCommunity);
 

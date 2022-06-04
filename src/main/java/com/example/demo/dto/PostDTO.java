@@ -1,9 +1,12 @@
 package com.example.demo.dto;
 
 import com.example.demo.model.*;
+import com.example.demo.service.ReactionPostService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.AccessType;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -13,6 +16,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class PostDTO implements Serializable {
+
     private int postId;
     private String title;
     private String text;

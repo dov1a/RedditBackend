@@ -4,11 +4,16 @@ import com.example.demo.enums.ReactionType;
 import com.example.demo.model.ReactionPost;
 import com.example.demo.model.User;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class ReactionPostDTO implements Serializable {
     private int reactionId;
     private ReactionType reactionType;
@@ -22,7 +27,6 @@ public class ReactionPostDTO implements Serializable {
         this.timestamp = reactionPost.getTimestamp();
         this.userId = reactionPost.getUser().getUserId();
         this.postId = reactionPost.getPost().getPostId();
-
     }
 
 }

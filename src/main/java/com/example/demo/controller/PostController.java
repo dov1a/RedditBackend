@@ -37,16 +37,13 @@ public class PostController {
     @GetMapping
     public ResponseEntity<List<PostDTO>> findAll(){
 
+        //int karma = reactionPostService.karma(6);
+        //System.out.println("KARMA ZA POST " + 6 + " JE " + karma);
 
 
         List<Post> posts = postService.findAll();
         List<PostDTO> postDTOS = new ArrayList<>();
         for (Post post : posts){
-            int karma = reactionPostService.karma(post.getPostId());
-
-            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            System.out.println("OVO JE KARMA OD OBJAVE " + post.getPostId() + "I VREDNOST JE " + karma  );
-            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             postDTOS.add(new PostDTO(post));
         }
 
@@ -61,9 +58,6 @@ public class PostController {
         for (Post post : posts){
             if(post.getCommunity().getCommunityId() == id){
                 postDTOS.add(new PostDTO(post));
-
-
-
 
             }
 

@@ -16,5 +16,6 @@ public interface ReactionPostService {
     ReactionPost save(ReactionPost reaction);
     void delete(int id);
 
+    int karma(int postId);
 
 }

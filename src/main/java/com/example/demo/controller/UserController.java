@@ -147,8 +147,8 @@ public class UserController {
     public ResponseEntity<UserTokenState> createAuthenticationToken(
             @RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) {
 
-        System.out.println("username" + authenticationRequest.getUsername());
-        System.out.println("password" + authenticationRequest.getPassword());
+        System.out.println("username " + authenticationRequest.getUsername());
+        System.out.println("password " + authenticationRequest.getPassword());
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authenticationRequest.getUsername(), authenticationRequest.getPassword()));
