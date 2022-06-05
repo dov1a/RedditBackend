@@ -1,9 +1,9 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.Flair;
+import com.example.demo.model.FlairCommunity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FlairRepository extends JpaRepository<Flair, Integer> {
+public interface FlairCommunityRepository extends JpaRepository<FlairCommunity, Integer> {
 }

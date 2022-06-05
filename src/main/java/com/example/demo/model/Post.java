@@ -1,9 +1,7 @@
 package com.example.demo.model;
 
-import com.example.demo.service.ReactionPostService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -60,14 +58,16 @@ public class Post {
     @JoinColumn(name = "report_id")
     private Set<Report> reports;
 
-
     @ManyToOne
     @JoinColumn(name = "flair_id")
-    private Flair flairs;
+    private FlairCommunity flairs;
+
+    @Column(name = "active")
+    private String active;
 
 
 
-    public Post(int postId, String title, String text, LocalDate creationDate, String imagePath, Community community, User user, int reactions, Flair flairs) {
+    public Post(int postId, String title, String text, LocalDate creationDate, String imagePath, Community community, User user, int reactions, FlairCommunity flairs, String active) {
         this.postId = postId;
         this.title = title;
         this.text = text;
@@ -77,6 +77,7 @@ public class Post {
         this.community = community;
         this.user = user;
         this.flairs = flairs;
+        this.active = active;
     }
 
     public Post(){

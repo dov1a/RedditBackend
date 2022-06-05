@@ -39,7 +39,7 @@ public class Community {
 
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = LAZY)
     @JoinColumn(name = "flair_id")
-    private Set<Flair> flairs;
+    private Set<FlairCommunity> flairs;
 
     //BACA GRESKU
     @JsonIgnore

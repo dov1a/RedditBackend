@@ -162,6 +162,24 @@ public class UserController {
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
     }
 
+    @PutMapping(value = "/changeData/{id}", consumes = "application/json")
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable("id") Integer id) {
+        User user = userService.findOneById(id);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        user.setEmail(userDTO.getEmail());
+        user.setDisplayName(userDTO.getDisplayName());
+        user.setDescription(userDTO.getDescription());
+        user.setAvatar(userDTO.getAvatar());
+
+        user = userService.save(user);
+
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
+
 
 
 

@@ -1,12 +1,9 @@
 package com.example.demo.dto;
 
 import com.example.demo.model.*;
-import com.example.demo.service.ReactionPostService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.AccessType;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -27,7 +24,7 @@ public class PostDTO implements Serializable {
     private int reactions;
     private Set<Comment> comments;
     private Set<Report> reports;
-    private Flair flairs;
+    private FlairCommunity flairs;
 
     public PostDTO(Post createdPost) {
         this.postId = createdPost.getPostId();

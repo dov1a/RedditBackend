@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.Set;
 
 @Getter
@@ -20,7 +19,7 @@ public class CommunityDTO implements Serializable {
     private LocalDate creationDate;
     private boolean isSuspend;
     private String suspendedReason;
-    private Set<Flair> flairs;
+    private Set<FlairCommunity> flairs;
     private Set<Rule> rules;
     private Set<Post> posts;
     private Set<Banned> banned;

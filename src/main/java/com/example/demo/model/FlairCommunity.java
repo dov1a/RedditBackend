@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import com.example.demo.enums.ReactionType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,9 +9,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
-@NoArgsConstructor
-public class Flair {
+public class FlairCommunity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +19,24 @@ public class Flair {
     @Column(name = "name", unique = false, nullable = false)
     private String name;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "community_id")
-    private Set<Community> communities;
+    private Community communities;
 
-    @OneToMany
-    @JoinColumn(name = "post_id")
-    private Set<Post> posts;
+    @Column(name = "active")
+    private String active;
+
+
+    public FlairCommunity(int flairId, String name, Community communities, String active) {
+        this.flairId = flairId;
+        this.name = name;
+        this.communities = communities;
+        this.active = active;
+    }
+
+    public FlairCommunity() {
+
+    }
 
 
 }
