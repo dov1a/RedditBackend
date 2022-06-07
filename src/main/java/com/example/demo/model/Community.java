@@ -36,7 +36,6 @@ public class Community {
     @Column(name = "suspendedReason")
     private String  suspendedReason;
 
-
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = LAZY)
     @JoinColumn(name = "flair_id")
     private Set<FlairCommunity> flairs;
@@ -47,7 +46,7 @@ public class Community {
     @JoinColumn(name = "rule_id")
     private Set<Rule> rules;
 
-
+    @JsonIgnore
     @OneToMany(cascade = {CascadeType.ALL}, fetch = LAZY)
     @JoinColumn(name = "post_id")
     private Set<Post> posts;
@@ -66,8 +65,13 @@ public class Community {
     @JoinColumn(name = "user_id")
     private User moderator;
 
+    @Column(name = "active")
+    private String active;
 
-    public Community(int communityId, String name, String description, LocalDate creationDate, boolean isSuspend, String suspendedReason, User moderator) {
+
+
+
+    public Community(int communityId, String name, String description, LocalDate creationDate, boolean isSuspend, String suspendedReason, User moderator, String active) {
         this.communityId = communityId;
         this.name = name;
         this.description = description;
@@ -75,6 +79,7 @@ public class Community {
         this.isSuspend = isSuspend;
         this.suspendedReason = suspendedReason;
         this.moderator = moderator;
+        this.active = active;
     }
 
     public Community(){

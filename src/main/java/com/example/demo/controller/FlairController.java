@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.FlairCommunityDTO;
+import com.example.demo.dto.PostDTO;
 import com.example.demo.dto.RuleDTO;
 import com.example.demo.model.FlairCommunity;
+import com.example.demo.model.Post;
 import com.example.demo.model.Rule;
 import com.example.demo.service.FlairCommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,37 @@ public class FlairController {
         FlairCommunityDTO flairCommunityDTO = new FlairCommunityDTO(createdFlair);
 
         return new ResponseEntity<>(flairCommunityDTO, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<FlairCommunityDTO> deleteFlair(@PathVariable Integer id) {
+
+        FlairCommunity flairCommunity = flairCommunityService.getOne(id);
+
+        if (flairCommunity == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        flairCommunity.setActive("false");
+
+        flairCommunity = flairCommunityService.save(flairCommunity);
+
+        return new ResponseEntity<>(new FlairCommunityDTO(flairCommunity), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{id}", consumes = "application/json")
+    public ResponseEntity<FlairCommunityDTO> updateFlair(@RequestBody FlairCommunityDTO flairCommunityDTO, @PathVariable("id") Integer id) {
+        FlairCommunity flairCommunity = flairCommunityService.getOne(id);
+
+        if (flairCommunity == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        flairCommunity.setName(flairCommunityDTO.getName());
+
+        flairCommunity = flairCommunityService.save(flairCommunity);
+
+        return new ResponseEntity<>(new FlairCommunityDTO(flairCommunity), HttpStatus.OK);
     }
 
 }

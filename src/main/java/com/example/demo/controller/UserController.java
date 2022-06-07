@@ -114,9 +114,9 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/{id}", consumes = "application/json")
-    public ResponseEntity<Void> changePassword(@RequestBody @Validated ResetPasswordDTO resetPasswordDTO, @PathVariable("id") Integer id){
-        User user = userService.findOneById(id);
+    @PutMapping(value = "/{username}", consumes = "application/json")
+    public ResponseEntity<Void> changePassword(@RequestBody @Validated ResetPasswordDTO resetPasswordDTO, @PathVariable("username") String username){
+        User user = userService.findOne(username);
 
         if (passwordEncoder.matches(resetPasswordDTO.getOldPassword(), user.getPassword())){
             user.setPassword(passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
@@ -130,8 +130,24 @@ public class UserController {
     }
 
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+    @DeleteMapping(value = "/{username}")
+    public ResponseEntity<UserDTO> deleteUser(@PathVariable String username) {
+
+        User user = userService.findOne(username);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        user.setRoles(Roles.USER);
+
+        user = userService.save(user);
+
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/deleteModerator/{id}")
+    public ResponseEntity<Void> deleteModerator(@PathVariable Integer id) {
 
         User user = userService.findOneById(id);
 
@@ -159,12 +175,17 @@ public class UserController {
         String jwt = tokenUtils.generateToken(user);
         int expiresIn = tokenUtils.getExpiredIn();
 
+        System.out.println("Mesto za token");
+        System.out.println(jwt);
+        System.out.println("-----------------------");
+
+
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
     }
 
-    @PutMapping(value = "/changeData/{id}", consumes = "application/json")
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable("id") Integer id) {
-        User user = userService.findOneById(id);
+    @PutMapping(value = "/changeData/{username}", consumes = "application/json")
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable("username") String username) {
+        User user = userService.findOne(username);
 
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

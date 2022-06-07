@@ -40,7 +40,10 @@ public class CommunityController {
         List<Community> communities = communityService.findAll();
         List<CommunityDTO> communityDTOS = new ArrayList<>();
         for (Community community : communities){
-            communityDTOS.add(new CommunityDTO(community));
+            if (community.getActive().equals("true")){
+                communityDTOS.add(new CommunityDTO(community));
+            }
+
         }
 
         return new ResponseEntity<>(communityDTOS, HttpStatus.OK);
@@ -93,29 +96,34 @@ public class CommunityController {
 
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteCommmunity(@PathVariable Integer id) {
+    public ResponseEntity<CommunityDTO> deleteCommmunity(@PathVariable Integer id) {
 
+        List<Post> allPosts = postService.findAll();
+        List<Post> communityPosts = new ArrayList<>();
 
-        Optional<Community> community = communityService.findOne(id);
+        Community community = communityService.getOneById(id);
 
-        Set<Post> communityPosts = community.get().getPosts();
-
-
-
-        if (community != null) {
-
-//            for (Post post : communityPosts)
-//            {
-//
-//                PostController postController = new PostController();
-//                postController.deletePost(post.getPostId());
-//            }
-
-            communityService.delete(community.get().getCommunityId());
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (community == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        community.setActive("false");
+
+        community = communityService.save(community);
+
+        for (Post post: allPosts){
+            if(post.getCommunity().getCommunityId() == id){
+                communityPosts.add(post);
+            }
+        }
+
+        for (Post post: communityPosts ){
+            post.setActive("false");
+            postService.save(post);
+        }
+
+
+        return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.OK);
     }
 
 }

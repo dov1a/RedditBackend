@@ -12,7 +12,6 @@ import java.util.Set;
 @Setter
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor
 public class Comment {
 
     @Id
@@ -26,9 +25,6 @@ public class Comment {
     @Column(name = "timestamp", unique = false, nullable = false)
     private LocalDate timestamp;
 
-    @Column(name = "isDeleted", unique = false, nullable = false)
-    private boolean isDeleted;
-
 //    @ManyToOne
 //    @JoinColumn(name = "comment_id")
 //    private Comment repliesTo;
@@ -37,9 +33,8 @@ public class Comment {
     @JoinColumn(name = "report_id")
     private Set<Report> reports = new HashSet<>();
 
-    @OneToMany
-    @JoinColumn(name = "reaction_id")
-    private Set<ReactionPost> reactions = new HashSet<>();
+    @Column(name = "reaction")
+    private int reactions;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -49,5 +44,12 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Column(name = "active")
+    private String active;
 
+
+
+    public Comment(){
+
+    }
 }

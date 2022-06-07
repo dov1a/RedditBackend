@@ -31,7 +31,9 @@ public class RuleController {
         List<Rule> rules = ruleService.findAll();
         List<RuleDTO> ruleDTOS = new ArrayList<>();
         for (Rule rule : rules){
-            ruleDTOS.add(new RuleDTO(rule));
+            if (rule.getActive().equals("true")){
+                ruleDTOS.add(new RuleDTO(rule));
+            }
         }
 
         return new ResponseEntity<>(ruleDTOS, HttpStatus.OK);
@@ -43,7 +45,7 @@ public class RuleController {
         List<Rule> rules = ruleService.findAll();
         List<RuleDTO> ruleDTOS = new ArrayList<>();
         for (Rule rule : rules){
-            if(rule.getCommunity().getCommunityId() == id){
+            if(rule.getCommunity().getCommunityId() == id && rule.getActive().equals("true")){
                 ruleDTOS.add(new RuleDTO(rule));
             }
         }
@@ -93,16 +95,19 @@ public class RuleController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteRule(@PathVariable Integer id) {
+    public ResponseEntity<RuleDTO> deleteRule(@PathVariable Integer id) {
 
-        Optional<Rule> rule = ruleService.findOne(id);
+        Rule rule = ruleService.getOne(id);
 
-        if (rule != null) {
-            ruleService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (rule == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        rule.setActive("false");
+
+        rule = ruleService.save(rule);
+
+        return new ResponseEntity<>(new RuleDTO(rule), HttpStatus.OK);
     }
 
 }

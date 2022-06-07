@@ -24,5 +24,8 @@ public class Rule {
     @JoinColumn(name = "community_id", unique = false, nullable = false)
     private Community community;
 
+    @Column(name = "active")
+    private String active;
+
 
 }

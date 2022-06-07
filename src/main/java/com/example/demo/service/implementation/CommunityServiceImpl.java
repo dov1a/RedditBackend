@@ -60,6 +60,7 @@ public class CommunityServiceImpl implements CommunityService {
         newCommunity.isSuspend(false);
         newCommunity.setSuspendedReason(null);
         newCommunity.setModerator(userService.findOneById(communityDTO.getModerator()));
+        newCommunity.setActive("true");
 
         newCommunity = communityRepository.save(newCommunity);
 

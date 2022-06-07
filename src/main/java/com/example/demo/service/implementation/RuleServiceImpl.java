@@ -48,6 +48,7 @@ public class RuleServiceImpl implements RuleService {
         Rule newRule = new Rule();
         newRule.setCommunity(communityService.getOneById(rule.get().getCommunity().getCommunityId()));
         newRule.setDescription(ruleDTO.getDescription());
+        newRule.setActive("true");
 
         newRule = ruleRepository.save(newRule);
 

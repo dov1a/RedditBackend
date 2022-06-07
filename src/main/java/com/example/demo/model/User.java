@@ -73,6 +73,9 @@ public class User {
     @Column(name = "banned_id")
     private Set<Banned> banned;
 
+    @Column(name = "active")
+    private String active;
+
 
 
 //    @OneToOne
@@ -80,7 +83,7 @@ public class User {
 //    private Community moderatesCommunity;
 
 
-    public User(int userId, String username, String password, String email, String avatar, LocalDate registrationDate, String description, String displayName, Roles roles) {
+    public User(int userId, String username, String password, String email, String avatar, LocalDate registrationDate, String description, String displayName, Roles roles, String active) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -90,6 +93,7 @@ public class User {
         this.description = description;
         this.displayName = displayName;
         this.roles = roles;
+        this.active = active;
     }
 
     public User(){

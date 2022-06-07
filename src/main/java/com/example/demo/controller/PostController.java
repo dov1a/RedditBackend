@@ -37,10 +37,6 @@ public class PostController {
     @GetMapping
     public ResponseEntity<List<PostDTO>> findAll(){
 
-        //int karma = reactionPostService.karma(6);
-        //System.out.println("KARMA ZA POST " + 6 + " JE " + karma);
-
-
         List<Post> posts = postService.findAll();
         List<PostDTO> postDTOS = new ArrayList<>();
         for (Post post : posts){
@@ -52,6 +48,7 @@ public class PostController {
 
         return new ResponseEntity<>(postDTOS, HttpStatus.OK);
     };
+
 
     @GetMapping("/community/{communityId}")
     public ResponseEntity<List<PostDTO>> getPostsByCommunity(@PathVariable("communityId") Integer id){
