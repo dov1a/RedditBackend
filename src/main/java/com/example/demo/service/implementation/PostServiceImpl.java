@@ -69,7 +69,6 @@ public class PostServiceImpl implements PostService {
         newPost.setImagePath(postDTO.getImagePath());
         newPost.setCommunity(communityService.getOneById(postDTO.getCommunity()));
         newPost.setUser(userService.findOneById(postDTO.getUser()));
-        newPost.setFlairs(postDTO.getFlairs());
         newPost.setActive("true");
 
         newPost = postRepository.save(newPost);

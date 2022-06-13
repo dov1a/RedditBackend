@@ -18,7 +18,6 @@ public class ReactionPost {
     @Column(name = "reaction_id", nullable = false)
     private int reactionId;
 
-
     @Column(name = "type")
     private ReactionType type;
 

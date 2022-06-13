@@ -4,14 +4,13 @@ import com.example.demo.dto.ReactionCommentDTO;
 import com.example.demo.dto.ReactionPostDTO;
 import com.example.demo.model.ReactionComment;
 import com.example.demo.model.ReactionPost;
+import com.example.demo.repository.ReactionCommentRepository;
 import com.example.demo.repository.ReactionPostRepository;
-import com.example.demo.service.PostService;
-import com.example.demo.service.ReactionCommentService;
-import com.example.demo.service.ReactionPostService;
-import com.example.demo.service.UserService;
+import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,29 +18,57 @@ import java.util.Optional;
 public class ReactionCommentServiceImpl implements ReactionCommentService {
 
 
+    @Autowired
+    private ReactionCommentRepository reactionCommentRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CommentService commentService;
+
     @Override
     public Optional<ReactionComment> findOne(int id) {
-        return Optional.empty();
+        return reactionCommentRepository.findById(id);
     }
 
     @Override
     public ReactionComment getOne(int id) {
-        return null;
+        return reactionCommentRepository.getById(id);
     }
 
     @Override
     public ReactionComment createReaction(ReactionCommentDTO reactionCommentDTO) {
-        return null;
+        Optional<ReactionComment> reactionComment = reactionCommentRepository.findById(reactionCommentDTO.getReactionId());
+
+        if(reactionComment.isPresent()){
+
+            return null;
+        }
+
+        ReactionComment newReactionComment = new ReactionComment();
+        newReactionComment.setType(reactionCommentDTO.getReactionType());
+        newReactionComment.setTimestamp(LocalDate.now());
+        newReactionComment.setUser(userService.findOneById(reactionCommentDTO.getUserId()));
+        newReactionComment.setComment(commentService.getOne(reactionCommentDTO.getCommentId()));
+
+        newReactionComment = reactionCommentRepository.save(newReactionComment);
+
+        return newReactionComment;
     }
 
     @Override
     public List<ReactionComment> findAll() {
-        return null;
+        return reactionCommentRepository.findAll();
     }
 
     @Override
     public ReactionComment save(ReactionComment reaction) {
-        return null;
+        try{
+            return reactionCommentRepository.save(reaction);
+        }catch (IllegalArgumentException e){
+            return null;
+        }
     }
 
     @Override

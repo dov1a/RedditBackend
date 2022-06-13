@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -130,34 +131,22 @@ public class UserController {
     }
 
 
-    @DeleteMapping(value = "/{username}")
-    public ResponseEntity<UserDTO> deleteUser(@PathVariable String username) {
+    @DeleteMapping(value = "/blockUser/{id}")
+    public ResponseEntity<UserDTO> blockUser(@PathVariable Integer id) {
 
-        User user = userService.findOne(username);
+        User user = userService.findOneById(id);
 
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        user.setRoles(Roles.USER);
+        user.setRoles(Roles.BLOCK_USER);
 
         user = userService.save(user);
 
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/deleteModerator/{id}")
-    public ResponseEntity<Void> deleteModerator(@PathVariable Integer id) {
-
-        User user = userService.findOneById(id);
-
-        if (user != null) {
-            userService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
     @PostMapping("/login")
     public ResponseEntity<UserTokenState> createAuthenticationToken(
@@ -178,6 +167,7 @@ public class UserController {
         System.out.println("Mesto za token");
         System.out.println(jwt);
         System.out.println("-----------------------");
+
 
 
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));

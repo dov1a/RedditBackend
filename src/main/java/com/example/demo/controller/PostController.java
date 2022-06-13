@@ -9,6 +9,7 @@ import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -141,8 +142,8 @@ public class PostController {
         post.setImagePath(postDTO.getImagePath());
         post.setCommunity(communityService.getOneById(post.getCommunity().getCommunityId()));
         post.setUser(userService.findOneById(post.getUser().getUserId()));
-        post.setReports(postDTO.getReports());
-        post.setFlairs(postDTO.getFlairs());
+//        post.setReports(postDTO.getReports());
+//        post.setFlairs(postDTO.getFlairs());
 
 
         post = postService.save(post);

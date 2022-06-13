@@ -20,6 +20,21 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    @GetMapping
+    public ResponseEntity<List<CommentDTO>> findAll(){
+
+        List<Comment> comments = commentService.findAll();
+        List<CommentDTO> commentDTOS = new ArrayList<>();
+        for (Comment comment : comments){
+            if (comment.getActive().equals("true")){
+                commentDTOS.add(new CommentDTO(comment));
+            }
+
+        }
+
+        return new ResponseEntity<>(commentDTOS, HttpStatus.OK);
+    };
+
     @GetMapping("/{postId}")
     public ResponseEntity<List<CommentDTO>> getCommentsByPost(@PathVariable("postId") Integer id){
 

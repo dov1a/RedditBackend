@@ -50,14 +50,17 @@ public class Post {
     @Column(name = "reaction")
     private int reactions;
 
+    @JsonIgnore
     @OneToMany(cascade = {ALL}, fetch = LAZY)
     @JoinColumn(name = "comment_id")
     private Set<Comment> comments;
 
+    @JsonIgnore
     @OneToMany(cascade = {ALL}, fetch = LAZY)
     @JoinColumn(name = "report_id")
     private Set<Report> reports;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "flair_id")
     private FlairCommunity flairs;

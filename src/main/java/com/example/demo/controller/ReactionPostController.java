@@ -34,10 +34,6 @@ public class ReactionPostController {
     @GetMapping
     public ResponseEntity<List<ReactionPostDTO>> findAll(){
 
-        //int karma = reactionPostService.karma(6);
-        //System.out.println("KARMA ZA POST " + 6 + " JE " + karma);
-
-
         List<ReactionPost> reactionPosts = reactionPostService.findAll();
         List<ReactionPostDTO> reactionPostDTOS = new ArrayList<>();
         for (ReactionPost reactionPost : reactionPosts){
@@ -84,14 +80,7 @@ public class ReactionPostController {
     @PostMapping("/create")
     public ResponseEntity<ReactionPostDTO> create(@RequestBody ReactionPostDTO newReaction){
 
-        System.out.println("=================================================================================");
-        System.out.println("REAKCIJA JE TIPA " + newReaction.getReactionType());
-        System.out.println("USER ID OD REAKCIJE JE " + newReaction.getUserId());
-
         ReactionPost createdReaction = reactionPostService.createReaction(newReaction);
-
-
-
 
         if(createdReaction == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);

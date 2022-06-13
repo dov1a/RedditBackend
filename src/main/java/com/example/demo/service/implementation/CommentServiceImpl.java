@@ -54,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
         newComment.setText(commentDTO.getText());
         newComment.setTimestamp(LocalDate.now());
         newComment.setUser(userService.findOneById(commentDTO.getUser()));
-        newComment.setPost(postService.getOne(commentDTO.getCommentId()));
+        newComment.setPost(postService.getOne(commentDTO.getPost()));
         newComment.setActive("true");
 
         newComment = commentRepository.save(newComment);
