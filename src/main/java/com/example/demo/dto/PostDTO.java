@@ -24,7 +24,7 @@ public class PostDTO implements Serializable {
 //    private int reactions;
 //    private Set<Comment> comments;
 //    private Set<Report> reports;
-//    private FlairCommunity flairs;
+    private int flair;
     private String active;
 
     public PostDTO(Post createdPost) {
@@ -35,7 +35,9 @@ public class PostDTO implements Serializable {
         this.imagePath = createdPost.getImagePath();
         this.community = createdPost.getCommunity().getCommunityId();
         this.user = createdPost.getUser().getUserId();
+        this.flair = createdPost.getFlairs().getFlairId();
         this.active = createdPost.getActive();
+
     }
 
 }

@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.PostDTO;
+import com.example.demo.dto.ReactionPostDTO;
+import com.example.demo.enums.ReactionType;
 import com.example.demo.model.*;
 import com.example.demo.service.CommunityService;
 import com.example.demo.service.PostService;
@@ -104,10 +106,19 @@ public class PostController {
 
         Post createdPost = postService.createPost(newPost);
 
+
         if(createdPost == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
         PostDTO postDTO = new PostDTO(createdPost);
+
+        //CREATE REACTION FOR POST
+        ReactionPostDTO reactionPost = new ReactionPostDTO();
+        reactionPost.setPostId(postDTO.getPostId());
+        reactionPost.setReactionType(ReactionType.UPVOTE);
+        reactionPost.setUserId(postDTO.getUser());
+        ReactionPost createdReaction = reactionPostService.createReaction(reactionPost);
+
 
         return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
     }

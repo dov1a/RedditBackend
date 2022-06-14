@@ -60,7 +60,6 @@ public class Post {
     @JoinColumn(name = "report_id")
     private Set<Report> reports;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "flair_id")
     private FlairCommunity flairs;

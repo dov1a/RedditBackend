@@ -4,6 +4,7 @@ import com.example.demo.dto.PostDTO;
 import com.example.demo.model.*;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.service.CommunityService;
+import com.example.demo.service.FlairCommunityService;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private CommunityService communityService;
+
+    @Autowired
+    private FlairCommunityService flairCommunityService;
 
     @Override
     public Optional<Post> findOne(Integer id) {
@@ -60,7 +64,6 @@ public class PostServiceImpl implements PostService {
             return null;
         }
 
-        System.out.println("ID: " + postDTO.getPostId());
 
         Post newPost = new Post();
         newPost.setTitle(postDTO.getTitle());
@@ -70,6 +73,7 @@ public class PostServiceImpl implements PostService {
         newPost.setCommunity(communityService.getOneById(postDTO.getCommunity()));
         newPost.setUser(userService.findOneById(postDTO.getUser()));
         newPost.setActive("true");
+        newPost.setFlairs(flairCommunityService.getOne(postDTO.getFlair()));
 
         newPost = postRepository.save(newPost);
 

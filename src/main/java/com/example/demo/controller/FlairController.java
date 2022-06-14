@@ -6,6 +6,7 @@ import com.example.demo.dto.RuleDTO;
 import com.example.demo.model.FlairCommunity;
 import com.example.demo.model.Post;
 import com.example.demo.model.Rule;
+import com.example.demo.model.User;
 import com.example.demo.service.FlairCommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "api/communityFlair")
@@ -35,6 +37,18 @@ public class FlairController {
 
         return new ResponseEntity<>(flairCommunityDTOS, HttpStatus.OK);
     };
+
+    @GetMapping("/oneFlairById/{flairId}")
+    public ResponseEntity<FlairCommunity> getOneByUsername(@PathVariable("flairId") int id){
+
+        Optional<FlairCommunity> flairCommunity = flairCommunityService.findOne(id);
+
+        if(!flairCommunity.isPresent()){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(flairCommunity.get(), HttpStatus.OK);
+    }
+
 
     @PostMapping("/create")
     public ResponseEntity<FlairCommunityDTO> create(@RequestBody FlairCommunityDTO newFlair){
