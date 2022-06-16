@@ -1,43 +1,70 @@
 package com.example.demo.service.implementation;
 
-import com.example.demo.dto.ReportDTO;
-import com.example.demo.model.Report;
+import com.example.demo.dto.ReportPostDTO;
+import com.example.demo.model.ReportPost;
 import com.example.demo.repository.ReportRepository;
-import com.example.demo.service.ReportService;
+import com.example.demo.service.PostService;
+import com.example.demo.service.ReportPostService;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ReportServiceImpl implements ReportService {
+public class ReportServiceImpl implements ReportPostService {
 
     @Autowired
     private ReportRepository reportRepository;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private PostService postService;
+
     @Override
-    public Optional<Report> findOne(int id) {
+    public Optional<ReportPost> findOne(int id) {
         return reportRepository.findById(id);
     }
 
     @Override
-    public Report getOne(int id) {
+    public ReportPost getOne(int id) {
         return reportRepository.getById(id);
     }
 
     @Override
-    public Report createReport(ReportDTO reportDTO) {
-        return null;
+    public ReportPost createReport(ReportPostDTO reportDTO) {
+
+        Optional<ReportPost> reportPost = reportRepository.findById(reportDTO.getReportId());
+
+        if(reportPost.isPresent()){
+            return null;
+        }
+
+        ReportPost newReport = new ReportPost();
+        newReport.setReason(reportDTO.getReason());
+        newReport.setTimestamp(LocalDate.now());
+        newReport.setByUser(userService.findOneById(reportDTO.getByUser()));
+        newReport.setPost(postService.getOne(reportDTO.getPost()));
+        newReport.setAccepted(false);
+        newReport.setActive("true");
+
+        newReport = reportRepository.save(newReport);
+
+
+        return newReport;
     }
 
     @Override
-    public List<Report> findAll() {
+    public List<ReportPost> findAll() {
         return reportRepository.findAll();
     }
 
     @Override
-    public Report save(Report report) {
+    public ReportPost save(ReportPost report) {
         try{
             return reportRepository.save(report);
         }catch (IllegalArgumentException e){

@@ -21,9 +21,6 @@ public class PostDTO implements Serializable {
     private String imagePath;
     private int community;
     private int user;
-//    private int reactions;
-//    private Set<Comment> comments;
-//    private Set<Report> reports;
     private int flair;
     private String active;
 

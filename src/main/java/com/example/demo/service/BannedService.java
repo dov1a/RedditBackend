@@ -12,6 +12,7 @@ public interface BannedService {
 
     Optional<Banned> findOne(int id);
     List<Banned> findAll();
+    Banned getOne(int id);
     Banned save(Banned banned);
     Banned createBanned(BannedDTO bannedDTO);
     void delete(int id);

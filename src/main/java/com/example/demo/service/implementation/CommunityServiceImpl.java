@@ -57,8 +57,6 @@ public class CommunityServiceImpl implements CommunityService {
         newCommunity.setName(communityDTO.getName());
         newCommunity.setDescription(communityDTO.getDescription());
         newCommunity.setCreationDate(LocalDate.now());
-        newCommunity.isSuspend(false);
-        newCommunity.setSuspendedReason(null);
         newCommunity.setModerator(userService.findOneById(communityDTO.getModerator()));
         newCommunity.setActive("true");
 

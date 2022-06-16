@@ -87,6 +87,20 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     };
 
+    @GetMapping("/onlyBlockUser")
+    public ResponseEntity<List<User>> findBlockUser(){
+
+        List<User> allUsers = userService.findAll();
+        List<User> user = new ArrayList<>();
+        for (User user1 : allUsers){
+            if (user1.getRoles() == Roles.BLOCK_USER){
+                user.add(user1);
+            }
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    };
+
     @GetMapping("/onlyModerators")
     public ResponseEntity<List<User>> findAllModerators(){
 
@@ -141,6 +155,54 @@ public class UserController {
         }
 
         user.setRoles(Roles.BLOCK_USER);
+
+        user = userService.save(user);
+
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/changeUserToModerator/{id}")
+    public ResponseEntity<UserDTO> changeUserToModerator(@PathVariable Integer id) {
+
+        User user = userService.findOneById(id);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        user.setRoles(Roles.MODERATOR);
+
+        user = userService.save(user);
+
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/changeModeratorToUser/{id}")
+    public ResponseEntity<UserDTO> changeModeratorToUser(@PathVariable Integer id) {
+
+        User user = userService.findOneById(id);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        user.setRoles(Roles.USER);
+
+        user = userService.save(user);
+
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/unBlockUser/{id}")
+    public ResponseEntity<UserDTO> unBlockUser(@PathVariable Integer id) {
+
+        User user = userService.findOneById(id);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        user.setRoles(Roles.USER);
 
         user = userService.save(user);
 

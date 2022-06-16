@@ -1,8 +1,6 @@
 package com.example.demo.dto;
 
 import com.example.demo.model.Comment;
-import com.example.demo.model.Post;
-import com.example.demo.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +17,7 @@ public class CommentDTO implements Serializable {
     private String text;
     private LocalDate timestamp;
     //private CommentDTO repliesTo;
-    private Set<ReportDTO> reports;
+    private Set<ReportPostDTO> reports;
     private int reactions;
     //private CommentDTO comment;
     private int user;

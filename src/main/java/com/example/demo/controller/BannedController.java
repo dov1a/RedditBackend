@@ -21,7 +21,6 @@ public class BannedController {
     @Autowired
     private BannedService bannedService;
 
-
     @GetMapping
     public ResponseEntity<List<BannedDTO>> findAll(){
 
@@ -60,18 +59,7 @@ public class BannedController {
     }
 
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteBan(@PathVariable Integer id) {
 
-        Optional<Banned> banned = bannedService.findOne(id);
-
-        if (!banned.isPresent()) {
-            bannedService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
 
 

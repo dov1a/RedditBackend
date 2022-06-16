@@ -38,6 +38,11 @@ public class BannedServiceImpl implements BannedService {
     }
 
     @Override
+    public Banned getOne(int id) {
+        return bannedRepository.getById(id);
+    }
+
+    @Override
     public Banned save(Banned banned) {
         try{
             return bannedRepository.save(banned);
@@ -50,14 +55,19 @@ public class BannedServiceImpl implements BannedService {
     public Banned createBanned(BannedDTO bannedDTO) {
         Optional<Banned> banned = bannedRepository.findById(bannedDTO.getBannedId());
 
+
+        System.out.println(bannedDTO.getBannedId());
+
+
         if(banned.isPresent()){
             return null;
         }
 
         Banned newBan = new Banned();
-        newBan.setTimestamp((bannedDTO.getTimestamp()));
-        newBan.setBy(userService.findOneById(banned.get().getBy().getUserId()));
-        newBan.setCommunity(communityService.getOneById(banned.get().getCommunity().getCommunityId()));
+        newBan.setTimestamp(LocalDate.now());
+        newBan.setBy(userService.findOneById(bannedDTO.getByUser()));
+        newBan.setCommunity(communityService.getOneById(bannedDTO.getCommunity()));
+        newBan.setBannedReason(bannedDTO.getBannedReason());
 
         newBan = bannedRepository.save(newBan);
 

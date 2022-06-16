@@ -58,7 +58,7 @@ public class Post {
     @JsonIgnore
     @OneToMany(cascade = {ALL}, fetch = LAZY)
     @JoinColumn(name = "report_id")
-    private Set<Report> reports;
+    private Set<ReportPost> reports;
 
     @ManyToOne
     @JoinColumn(name = "flair_id")

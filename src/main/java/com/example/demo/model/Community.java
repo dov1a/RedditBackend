@@ -1,13 +1,9 @@
 package com.example.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Set;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -30,37 +26,6 @@ public class Community {
     @Column(name = "creationDate")
     private LocalDate creationDate;
 
-    @Column(name = "isSuspend")
-    private boolean  isSuspend;
-
-    @Column(name = "suspendedReason")
-    private String  suspendedReason;
-
-    @ManyToMany(cascade = {CascadeType.ALL}, fetch = LAZY)
-    @JoinColumn(name = "flair_id")
-    private Set<FlairCommunity> flairs;
-
-    //BACA GRESKU
-    @JsonIgnore
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = LAZY)
-    @JoinColumn(name = "rule_id")
-    private Set<Rule> rules;
-
-    @JsonIgnore
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = LAZY)
-    @JoinColumn(name = "post_id")
-    private Set<Post> posts;
-
-    @JsonIgnore
-    @OneToMany
-    @JoinColumn(name = "banned_id")
-    private Set<Banned> banned;
-
-    @JsonIgnore
-    @ManyToMany
-    @JoinColumn(name = "user_id")
-    private Set<User> users;
-
     @OneToOne
     @JoinColumn(name = "user_id")
     private User moderator;
@@ -68,19 +33,6 @@ public class Community {
     @Column(name = "active")
     private String active;
 
-
-
-
-    public Community(int communityId, String name, String description, LocalDate creationDate, boolean isSuspend, String suspendedReason, User moderator, String active) {
-        this.communityId = communityId;
-        this.name = name;
-        this.description = description;
-        this.creationDate = creationDate;
-        this.isSuspend = isSuspend;
-        this.suspendedReason = suspendedReason;
-        this.moderator = moderator;
-        this.active = active;
-    }
 
     public Community(){
 
@@ -118,21 +70,6 @@ public class Community {
         this.creationDate = creationDate;
     }
 
-    public boolean isSuspend(boolean suspend) {
-        return isSuspend;
-    }
-
-    public void setSuspend(boolean suspend) {
-        isSuspend = suspend;
-    }
-
-    public String getSuspendedReason() {
-        return suspendedReason;
-    }
-
-    public void setSuspendedReason(String suspendedReason) {
-        this.suspendedReason = suspendedReason;
-    }
 
     public User getModerator() {
         return moderator;

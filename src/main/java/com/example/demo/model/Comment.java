@@ -31,7 +31,7 @@ public class Comment {
 
     @OneToMany
     @JoinColumn(name = "report_id")
-    private Set<Report> reports = new HashSet<>();
+    private Set<ReportPost> reports = new HashSet<>();
 
     @Column(name = "reaction")
     private int reactions;

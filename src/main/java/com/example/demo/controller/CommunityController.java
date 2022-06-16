@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.CommunityDTO;
 import com.example.demo.dto.PostDTO;
 import com.example.demo.dto.UserDTO;
+import com.example.demo.enums.Roles;
 import com.example.demo.model.Community;
 import com.example.demo.model.Post;
 import com.example.demo.model.User;
@@ -72,7 +73,7 @@ public class CommunityController {
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json")
-    public ResponseEntity<CommunityDTO> updatePost(@RequestBody CommunityDTO communityDTO, @PathVariable("id") Integer id) {
+    public ResponseEntity<CommunityDTO> updateCommunity(@RequestBody CommunityDTO communityDTO, @PathVariable("id") Integer id) {
         Community community = communityService.getOneById(id);
 
         if (community == null) {
@@ -82,10 +83,6 @@ public class CommunityController {
         community.setName(communityDTO.getName());
         community.setDescription(communityDTO.getDescription());
         community.setCreationDate(communityDTO.getCreationDate());
-        community.isSuspend(communityDTO.isSuspend());
-        community.setSuspendedReason(communityDTO.getSuspendedReason());
-        community.setPosts(communityDTO.getPosts());
-        community.setFlairs(communityDTO.getFlairs());
         community.setModerator(userService.findOneById(community.getModerator().getUserId()));
 
 
@@ -98,8 +95,21 @@ public class CommunityController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<CommunityDTO> deleteCommmunity(@PathVariable Integer id) {
 
+        //TREBA DA OBRISEM COMMUNITY
+        //OBJAVE COMMUNITY
+        //AKO POSTOJI JEDAN MODERATOR OD COMMUNITY ON POSTAJE OBICAN KORISNIK
+
+
+
+        //KOMENTARE OBJAVA
+        //REAKCIJE KOMENTARA
+        //REAKCIJE OBJAVA
+
         List<Post> allPosts = postService.findAll();
+
         List<Post> communityPosts = new ArrayList<>();
+
+
 
         Community community = communityService.getOneById(id);
 
@@ -122,6 +132,11 @@ public class CommunityController {
             postService.save(post);
         }
 
+        User communityModerator = userService.findOneById(community.getModerator().getUserId());
+
+        communityModerator.setRoles(Roles.USER);
+
+        userService.save(communityModerator);
 
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.OK);
     }

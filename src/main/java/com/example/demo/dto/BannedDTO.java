@@ -18,12 +18,14 @@ public class BannedDTO implements Serializable {
     private LocalDate timestamp;
     private int byUser;
     private int community;
+    private String bannedReason;
 
     public BannedDTO(Banned createBanned){
         this.bannedId = createBanned.getBannedId();
         this.timestamp = createBanned.getTimestamp();
         this.byUser = createBanned.getBy().getUserId();
         this.community = createBanned.getCommunity().getCommunityId();
+        this.bannedReason = createBanned.getBannedReason();
 
     }
 
@@ -32,5 +34,6 @@ public class BannedDTO implements Serializable {
         this.timestamp = banned.get().getTimestamp();
         this.byUser = banned.get().getBy().getUserId();
         this.community = banned.get().getCommunity().getCommunityId();
+        this.bannedReason = banned.get().getBannedReason();
     }
 }

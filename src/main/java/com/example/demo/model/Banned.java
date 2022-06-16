@@ -29,6 +29,7 @@ public class Banned {
     @JoinColumn(name = "community", unique = false)
     private Community community;
 
-
+    @Column(name = "bannedReason", unique = false, nullable = false)
+    private String bannedReason;
 
 }

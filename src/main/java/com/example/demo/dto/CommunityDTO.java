@@ -18,12 +18,6 @@ public class CommunityDTO implements Serializable {
     private String description;
     private LocalDate creationDate;
     private boolean isSuspend;
-    private String suspendedReason;
-    private Set<FlairCommunity> flairs;
-    private Set<Rule> rules;
-    private Set<Post> posts;
-    private Set<Banned> banned;
-    private Set<User> users;
     private int moderator;
 
     public CommunityDTO(Community createdCommunity) {
@@ -31,8 +25,6 @@ public class CommunityDTO implements Serializable {
         this.name = createdCommunity.getName();
         this.description = createdCommunity.getDescription();
         this.creationDate = createdCommunity.getCreationDate();
-        this.isSuspend = createdCommunity.isSuspend();
-        this.suspendedReason = createdCommunity.getSuspendedReason();
         this.moderator = createdCommunity.getModerator().getUserId();
     }
 

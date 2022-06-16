@@ -41,7 +41,6 @@ public class ReactionCommentController {
         return new ResponseEntity<>(reactionCommentDTOS, HttpStatus.OK);
     };
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/create")
     public ResponseEntity<ReactionCommentDTO> create(@RequestBody ReactionCommentDTO newReaction){
 
@@ -56,7 +55,7 @@ public class ReactionCommentController {
     }
 
     @GetMapping("/comment/{commentId}")
-    public ResponseEntity<KarmaDTO> getPostKarma(@PathVariable("commentId") Integer id){
+    public ResponseEntity<KarmaDTO> getCommentKarma(@PathVariable("commentId") Integer id){
         KarmaDTO karmaDTO = new KarmaDTO();
         karmaDTO.setKarma(0);
         int upvote = 0;
@@ -70,6 +69,38 @@ public class ReactionCommentController {
 
         for (ReactionComment reactionComment : reactionCommentList){
             if (reactionComment.getComment().getCommentId() == id){
+                oneCommentReaction.add(reactionComment);
+            }
+        }
+
+        for(ReactionComment reactionComment : oneCommentReaction){
+            if (reactionComment.getType() == ReactionType.UPVOTE){
+                upvote = upvote + 1;
+            }else if(reactionComment.getType() == ReactionType.DOWNVOTE){
+                downvote = downvote + 1;
+            }
+        }
+
+        karmaDTO.setKarma(upvote - downvote);
+
+
+        return new ResponseEntity<>(karmaDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/commentByUser/{username}")
+    public ResponseEntity<KarmaDTO> getCommentKarmaByUser(@PathVariable("username") String username){
+        KarmaDTO karmaDTO = new KarmaDTO();
+        karmaDTO.setKarma(0);
+        int upvote = 0;
+        int downvote = 0;
+
+        List<ReactionComment> reactionCommentList = reactionCommentService.findAll();
+        List<ReactionComment> oneCommentReaction = new ArrayList<>();
+
+
+
+        for (ReactionComment reactionComment : reactionCommentList){
+            if (reactionComment.getComment().getUser().getUsername().equals(username)){
                 oneCommentReaction.add(reactionComment);
             }
         }

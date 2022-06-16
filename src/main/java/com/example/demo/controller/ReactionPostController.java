@@ -76,6 +76,38 @@ public class ReactionPostController {
         return new ResponseEntity<>(karmaDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/postByUser/{username}")
+    public ResponseEntity<KarmaDTO> getPostKarmaByOneUser(@PathVariable("username") String username){
+        KarmaDTO karmaDTO = new KarmaDTO();
+        karmaDTO.setKarma(0);
+        int upvote = 0;
+        int downvote = 0;
+
+        List<ReactionPost> reactionPostList = reactionPostService.findAll();
+        List<ReactionPost> onePostReaction = new ArrayList<>();
+
+
+
+        for (ReactionPost reactionPost : reactionPostList){
+            if (reactionPost.getPost().getUser().getUsername().equals(username)){
+                onePostReaction.add(reactionPost);
+            }
+        }
+
+        for(ReactionPost reactionPost : onePostReaction){
+            if (reactionPost.getType() == ReactionType.UPVOTE){
+                upvote = upvote + 1;
+            }else if(reactionPost.getType() == ReactionType.DOWNVOTE){
+                downvote = downvote + 1;
+            }
+        }
+
+        karmaDTO.setKarma(upvote - downvote);
+
+
+        return new ResponseEntity<>(karmaDTO, HttpStatus.OK);
+    }
+
 
     @PostMapping("/create")
     public ResponseEntity<ReactionPostDTO> create(@RequestBody ReactionPostDTO newReaction){
