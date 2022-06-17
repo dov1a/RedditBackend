@@ -66,7 +66,7 @@ public class ReportCommentController {
         return new ResponseEntity<>(new ReportCommentDTO(reportComment), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/acceptReport/{id}")
+    @DeleteMapping(value = "/declineReport/{id}")
     public ResponseEntity<ReportCommentDTO> declineReportComment(@PathVariable Integer id) {
 
         ReportComment reportComment = reportCommentService.getOne(id);
