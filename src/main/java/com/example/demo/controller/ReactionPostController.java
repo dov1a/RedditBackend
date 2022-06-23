@@ -112,14 +112,53 @@ public class ReactionPostController {
     @PostMapping("/create")
     public ResponseEntity<ReactionPostDTO> create(@RequestBody ReactionPostDTO newReaction){
 
-        ReactionPost createdReaction = reactionPostService.createReaction(newReaction);
+        boolean isOk = true;
 
-        if(createdReaction == null){
-            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        List<ReactionPost> reactionPosts = reactionPostService.findAll();
+
+        for (ReactionPost reactionPost: reactionPosts){
+            if (reactionPost.getUser().getUserId() == newReaction.getUserId() && reactionPost.getType() == ReactionType.UPVOTE
+                    && newReaction.getReactionType() == ReactionType.UPVOTE && reactionPost.getPost().getPostId() == newReaction.getPostId()){
+
+                isOk =  false;
+
+            }else if(reactionPost.getUser().getUserId() == newReaction.getUserId() && reactionPost.getType() == ReactionType.UPVOTE
+                    && newReaction.getReactionType() == ReactionType.DOWNVOTE && reactionPost.getPost().getPostId() == newReaction.getPostId()){
+
+                reactionPostService.delete(reactionPost.getReactionId());
+                ReactionPost createdReaction = reactionPostService.createReaction(newReaction);
+                ReactionPostDTO reactionPostDTO = new ReactionPostDTO(createdReaction);
+                return new ResponseEntity<>(reactionPostDTO, HttpStatus.CREATED);
+            }
         }
-        ReactionPostDTO reactionPostDTO = new ReactionPostDTO(createdReaction);
 
-        return new ResponseEntity<>(reactionPostDTO, HttpStatus.CREATED);
+
+        for (ReactionPost reactionPost: reactionPosts){
+            if (reactionPost.getUser().getUserId() == newReaction.getUserId() && reactionPost.getType() == ReactionType.DOWNVOTE
+                    && newReaction.getReactionType() == ReactionType.DOWNVOTE && reactionPost.getPost().getPostId() == newReaction.getPostId()){
+
+                isOk = false;
+
+
+            }else if(reactionPost.getUser().getUserId() == newReaction.getUserId() && reactionPost.getType() == ReactionType.DOWNVOTE
+                    && newReaction.getReactionType() == ReactionType.UPVOTE && reactionPost.getPost().getPostId() == newReaction.getPostId()){
+
+                reactionPostService.delete(reactionPost.getReactionId());
+                ReactionPost createdReaction = reactionPostService.createReaction(newReaction);
+                ReactionPostDTO reactionPostDTO = new ReactionPostDTO(createdReaction);
+                return new ResponseEntity<>(reactionPostDTO, HttpStatus.CREATED);
+            }
+
+        }
+
+        if (isOk){
+            ReactionPost createdReaction = reactionPostService.createReaction(newReaction);
+            ReactionPostDTO reactionPostDTO = new ReactionPostDTO(createdReaction);
+            return new ResponseEntity<>(reactionPostDTO, HttpStatus.CREATED);
+        }
+
+
+        return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
     }
 
 

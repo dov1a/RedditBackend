@@ -44,6 +44,19 @@ public class CommentController {
         return new ResponseEntity<>(commentDTOS, HttpStatus.OK);
     };
 
+    @GetMapping("/getOneById/{id}")
+    public ResponseEntity<CommentDTO> getOne(@PathVariable("id") Integer id){
+        Comment comment = commentService.getOne(id);
+
+        if (comment.getActive().equals("false")){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        CommentDTO commentDTO = new CommentDTO(comment);
+
+        return new ResponseEntity<>(commentDTO, HttpStatus.OK);
+    }
+
     @GetMapping("/{postId}")
     public ResponseEntity<List<CommentDTO>> getCommentsByPost(@PathVariable("postId") Integer id){
 

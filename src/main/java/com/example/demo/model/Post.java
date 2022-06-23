@@ -41,7 +41,6 @@ public class Post {
     @JoinColumn(name = "community_id")
     private Community community;
 
-
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -95,9 +95,6 @@ public class PostController {
 
         PostDTO postDTO = new PostDTO(posts);
 
-//        if(po){
-//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//        }
         return new ResponseEntity<>(postDTO, HttpStatus.OK);
     }
 
@@ -150,7 +147,7 @@ public class PostController {
 
         post.setTitle(postDTO.getTitle());
         post.setText(postDTO.getText());
-        post.setImagePath(postDTO.getImagePath());
+        //post.setImagePath(postDTO.getImagePath());
         post.setCommunity(communityService.getOneById(post.getCommunity().getCommunityId()));
         post.setUser(userService.findOneById(post.getUser().getUserId()));
 //        post.setReports(postDTO.getReports());

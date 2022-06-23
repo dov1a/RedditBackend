@@ -3,6 +3,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.CommunityDTO;
 import com.example.demo.model.Community;
+import com.example.demo.model.User;
 
 
 import java.util.List;
@@ -15,6 +16,8 @@ public interface CommunityService {
     Community save(Community community);
 
     Community getOneById(int id);
+
+    Community findOneByName(String communityName);
 
     Community createCommunity(CommunityDTO communityDTO);
 

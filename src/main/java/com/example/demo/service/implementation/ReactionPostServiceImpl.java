@@ -55,6 +55,7 @@ public class ReactionPostServiceImpl implements ReactionPostService {
         newReactionPost.setUser(userService.findOneById(reactionDTO.getUserId()));
         newReactionPost.setPost(postService.getOne(reactionDTO.getPostId()));
 
+
         newReactionPost = reactionPostRepository.save(newReactionPost);
 
         return newReactionPost;

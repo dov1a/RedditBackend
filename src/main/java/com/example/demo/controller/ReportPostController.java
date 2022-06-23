@@ -7,6 +7,7 @@ import com.example.demo.enums.ReactionType;
 import com.example.demo.model.Post;
 import com.example.demo.model.ReactionPost;
 import com.example.demo.model.ReportPost;
+import com.example.demo.service.PostService;
 import com.example.demo.service.ReportPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,9 @@ public class ReportPostController {
 
     @Autowired
     private ReportPostService reportPostService;
+
+    @Autowired
+    private PostService postService;
 
     @GetMapping
     public ResponseEntity<List<ReportPostDTO>> findAll(){
@@ -56,6 +60,7 @@ public class ReportPostController {
     public ResponseEntity<ReportPostDTO> acceptReportPost(@PathVariable Integer id) {
 
         ReportPost reportPost = reportPostService.getOne(id);
+        Post post = postService.getOne(reportPost.getPost().getPostId());
 
         if (reportPost == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -65,6 +70,10 @@ public class ReportPostController {
         reportPost.setAccepted(true);
 
         reportPost = reportPostService.save(reportPost);
+
+        post.setActive("false");
+        postService.save(post);
+
 
         return new ResponseEntity<>(new ReportPostDTO(reportPost), HttpStatus.OK);
     }

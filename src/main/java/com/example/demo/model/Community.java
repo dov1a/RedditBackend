@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,7 +10,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
 public class Community {
 
     @Id
@@ -33,6 +33,15 @@ public class Community {
     @Column(name = "active")
     private String active;
 
+
+    public Community(int communityId, String name, String description, LocalDate creationDate, User moderator, String active) {
+        this.communityId = communityId;
+        this.name = name;
+        this.description = description;
+        this.creationDate = creationDate;
+        this.moderator = moderator;
+        this.active = active;
+    }
 
     public Community(){
 

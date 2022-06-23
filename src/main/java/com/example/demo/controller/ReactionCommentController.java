@@ -44,14 +44,51 @@ public class ReactionCommentController {
     @PostMapping("/create")
     public ResponseEntity<ReactionCommentDTO> create(@RequestBody ReactionCommentDTO newReaction){
 
-        ReactionComment createdReaction = reactionCommentService.createReaction(newReaction);
+        boolean isOk = true;
 
-        if(createdReaction == null){
-            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        List<ReactionComment> reactionComments = reactionCommentService.findAll();
+
+        for (ReactionComment reactionComment: reactionComments){
+            if (reactionComment.getUser().getUserId() == newReaction.getUserId() && reactionComment.getType() == ReactionType.UPVOTE
+                    && newReaction.getReactionType() == ReactionType.UPVOTE && reactionComment.getComment().getCommentId() == newReaction.getCommentId()){
+
+                isOk =  false;
+
+            }else if(reactionComment.getUser().getUserId() == newReaction.getUserId() && reactionComment.getType() == ReactionType.UPVOTE
+                    && newReaction.getReactionType() == ReactionType.DOWNVOTE && reactionComment.getComment().getCommentId() == newReaction.getCommentId()){
+
+                reactionCommentService.delete(reactionComment.getReactionId());
+                ReactionComment createdReaction = reactionCommentService.createReaction(newReaction);
+                ReactionCommentDTO reactionCommentDTO = new ReactionCommentDTO(createdReaction);
+                return new ResponseEntity<>(reactionCommentDTO, HttpStatus.CREATED);
+            }
         }
-        ReactionCommentDTO reactionCommentDTO = new ReactionCommentDTO(createdReaction);
 
-        return new ResponseEntity<>(reactionCommentDTO, HttpStatus.CREATED);
+        for (ReactionComment reactionComment: reactionComments){
+            if (reactionComment.getUser().getUserId() == newReaction.getUserId() && reactionComment.getType() == ReactionType.DOWNVOTE
+                    && newReaction.getReactionType() == ReactionType.DOWNVOTE && reactionComment.getComment().getCommentId() == newReaction.getCommentId()){
+
+                isOk =  false;
+
+            }else if(reactionComment.getUser().getUserId() == newReaction.getUserId() && reactionComment.getType() == ReactionType.DOWNVOTE
+                    && newReaction.getReactionType() == ReactionType.UPVOTE && reactionComment.getComment().getCommentId() == newReaction.getCommentId()){
+
+                reactionCommentService.delete(reactionComment.getReactionId());
+                ReactionComment createdReaction = reactionCommentService.createReaction(newReaction);
+                ReactionCommentDTO reactionCommentDTO = new ReactionCommentDTO(createdReaction);
+                return new ResponseEntity<>(reactionCommentDTO, HttpStatus.CREATED);
+            }
+        }
+
+
+        if (isOk){
+            ReactionComment createdReaction = reactionCommentService.createReaction(newReaction);
+            ReactionCommentDTO reactionCommentDTO = new ReactionCommentDTO(createdReaction);
+            return new ResponseEntity<>(reactionCommentDTO, HttpStatus.CREATED);
+        }
+
+
+        return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
     }
 
     @GetMapping("/comment/{commentId}")

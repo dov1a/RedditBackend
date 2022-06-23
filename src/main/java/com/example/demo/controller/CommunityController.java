@@ -51,13 +51,31 @@ public class CommunityController {
     };
 
     @GetMapping("/{id}")
-    public ResponseEntity<Community> getOne(@PathVariable("id") Integer id){
-        Optional<Community> community = communityService.findOne(id);
-        if(!community.isPresent()){
+    public ResponseEntity<CommunityDTO> getOne(@PathVariable("id") Integer id){
+        Community community = communityService.getOneById(id);
+
+        if (community.getActive().equals("false")){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(community.get(), HttpStatus.OK);
+
+        CommunityDTO communityDTO = new CommunityDTO(community);
+
+        return new ResponseEntity<>(communityDTO, HttpStatus.OK);
     }
+
+    @GetMapping("/byCommunityName/{communityName}")
+    public ResponseEntity<CommunityDTO> getOneByCommunityName(@PathVariable("communityName") String communityName){
+
+        Community community = communityService.findOneByName(communityName);
+        if(community == null){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        CommunityDTO communityDTO = new CommunityDTO(community);
+
+        return new ResponseEntity<>(communityDTO, HttpStatus.OK);
+    }
+
 
     @PostMapping("/create")
     public ResponseEntity<CommunityDTO> create(@RequestBody CommunityDTO newCommunity){

@@ -2,8 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.ReportCommentDTO;
 import com.example.demo.dto.ReportPostDTO;
+import com.example.demo.model.Comment;
 import com.example.demo.model.ReportComment;
 import com.example.demo.model.ReportPost;
+import com.example.demo.service.CommentService;
 import com.example.demo.service.ReportCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,9 @@ public class ReportCommentController {
 
     @Autowired
     private ReportCommentService reportCommentService;
+
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping
     public ResponseEntity<List<ReportCommentDTO>> findAll(){
@@ -53,6 +58,7 @@ public class ReportCommentController {
     public ResponseEntity<ReportCommentDTO> acceptReportComment(@PathVariable Integer id) {
 
         ReportComment reportComment = reportCommentService.getOne(id);
+        Comment comment = commentService.getOne(reportComment.getComment().getCommentId());
 
         if (reportComment == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -62,6 +68,9 @@ public class ReportCommentController {
         reportComment.setAccepted(true);
 
         reportComment = reportCommentService.save(reportComment);
+
+        comment.setActive("false");
+        commentService.save(comment);
 
         return new ResponseEntity<>(new ReportCommentDTO(reportComment), HttpStatus.OK);
     }
@@ -78,6 +87,7 @@ public class ReportCommentController {
         reportComment.setActive("false");
 
         reportComment = reportCommentService.save(reportComment);
+
 
         return new ResponseEntity<>(new ReportCommentDTO(reportComment), HttpStatus.OK);
     }

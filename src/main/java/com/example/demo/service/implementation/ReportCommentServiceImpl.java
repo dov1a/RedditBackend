@@ -75,6 +75,6 @@ public class ReportCommentServiceImpl implements ReportCommentService {
 
     @Override
     public void delete(int id) {
-
+        reportCommentRepository.deleteById(id);
     }
 }
