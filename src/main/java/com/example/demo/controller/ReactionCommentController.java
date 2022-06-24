@@ -58,9 +58,7 @@ public class ReactionCommentController {
                     && newReaction.getReactionType() == ReactionType.DOWNVOTE && reactionComment.getComment().getCommentId() == newReaction.getCommentId()){
 
                 reactionCommentService.delete(reactionComment.getReactionId());
-                ReactionComment createdReaction = reactionCommentService.createReaction(newReaction);
-                ReactionCommentDTO reactionCommentDTO = new ReactionCommentDTO(createdReaction);
-                return new ResponseEntity<>(reactionCommentDTO, HttpStatus.CREATED);
+
             }
         }
 
@@ -74,9 +72,7 @@ public class ReactionCommentController {
                     && newReaction.getReactionType() == ReactionType.UPVOTE && reactionComment.getComment().getCommentId() == newReaction.getCommentId()){
 
                 reactionCommentService.delete(reactionComment.getReactionId());
-                ReactionComment createdReaction = reactionCommentService.createReaction(newReaction);
-                ReactionCommentDTO reactionCommentDTO = new ReactionCommentDTO(createdReaction);
-                return new ResponseEntity<>(reactionCommentDTO, HttpStatus.CREATED);
+
             }
         }
 

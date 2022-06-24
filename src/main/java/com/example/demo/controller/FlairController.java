@@ -8,6 +8,7 @@ import com.example.demo.model.Post;
 import com.example.demo.model.Rule;
 import com.example.demo.model.User;
 import com.example.demo.service.FlairCommunityService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "api/communityFlair")
@@ -23,6 +25,8 @@ public class FlairController {
 
     @Autowired
     private FlairCommunityService flairCommunityService;
+
+    Logger logger = Logger.getLogger(FlairController.class.getName());
 
     @GetMapping("/{communityId}")
     public ResponseEntity<List<FlairCommunityDTO>> getFlairByCommunity(@PathVariable("communityId") Integer id){
@@ -60,6 +64,8 @@ public class FlairController {
         }
         FlairCommunityDTO flairCommunityDTO = new FlairCommunityDTO(createdFlair);
 
+        logger.info("ADD NEW FLAIR");
+
         return new ResponseEntity<>(flairCommunityDTO, HttpStatus.CREATED);
     }
 
@@ -75,6 +81,8 @@ public class FlairController {
         flairCommunity.setActive("false");
 
         flairCommunity = flairCommunityService.save(flairCommunity);
+
+        logger.info("DELETE FLAIR");
 
         return new ResponseEntity<>(new FlairCommunityDTO(flairCommunity), HttpStatus.OK);
     }

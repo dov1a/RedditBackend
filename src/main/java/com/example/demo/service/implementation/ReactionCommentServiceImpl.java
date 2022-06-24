@@ -74,5 +74,7 @@ public class ReactionCommentServiceImpl implements ReactionCommentService {
     @Override
     public void delete(int id) {
 
+        reactionCommentRepository.deleteById(id);
+
     }
 }

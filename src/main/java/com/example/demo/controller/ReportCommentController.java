@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "api/reportComment")
@@ -24,6 +25,8 @@ public class ReportCommentController {
 
     @Autowired
     private CommentService commentService;
+
+    Logger logger = Logger.getLogger(ReportCommentController.class.getName());
 
     @GetMapping
     public ResponseEntity<List<ReportCommentDTO>> findAll(){
@@ -51,6 +54,8 @@ public class ReportCommentController {
         }
         ReportCommentDTO reportCommentDTO = new ReportCommentDTO(createdReport);
 
+        logger.info("USER HAS REPORTED COMMENT");
+
         return new ResponseEntity<>(reportCommentDTO, HttpStatus.CREATED);
     }
 
@@ -72,6 +77,8 @@ public class ReportCommentController {
         comment.setActive("false");
         commentService.save(comment);
 
+        logger.info("THE MODERATOR ACCEPTED THE REPORTED COMMENT. THE COMMENT WILL BE DELETED.");
+
         return new ResponseEntity<>(new ReportCommentDTO(reportComment), HttpStatus.OK);
     }
 
@@ -88,6 +95,7 @@ public class ReportCommentController {
 
         reportComment = reportCommentService.save(reportComment);
 
+        logger.info("THE MODERATOR DECLINE THE REPORTED COMMENT.");
 
         return new ResponseEntity<>(new ReportCommentDTO(reportComment), HttpStatus.OK);
     }

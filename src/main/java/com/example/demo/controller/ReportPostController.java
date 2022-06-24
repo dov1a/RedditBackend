@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "api/reportPost")
@@ -26,6 +27,8 @@ public class ReportPostController {
 
     @Autowired
     private PostService postService;
+
+    Logger logger = Logger.getLogger(ReportPostController.class.getName());
 
     @GetMapping
     public ResponseEntity<List<ReportPostDTO>> findAll(){
@@ -53,6 +56,8 @@ public class ReportPostController {
         }
         ReportPostDTO reportPostDTO = new ReportPostDTO(createdReport);
 
+        logger.info("USER HAS REPORTED POST");
+
         return new ResponseEntity<>(reportPostDTO, HttpStatus.CREATED);
     }
 
@@ -74,6 +79,7 @@ public class ReportPostController {
         post.setActive("false");
         postService.save(post);
 
+        logger.info("THE MODERATOR ACCEPTED THE REPORTED POST. THE POST WILL BE DELETED.");
 
         return new ResponseEntity<>(new ReportPostDTO(reportPost), HttpStatus.OK);
     }
@@ -91,6 +97,8 @@ public class ReportPostController {
         reportPost.setActive("false");
 
         reportPost = reportPostService.save(reportPost);
+
+        logger.info("THE MODERATOR DECLINE THE REPORTED POST.");
 
         return new ResponseEntity<>(new ReportPostDTO(reportPost), HttpStatus.OK);
     }

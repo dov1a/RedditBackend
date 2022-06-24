@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "api/users")
@@ -50,6 +51,8 @@ public class UserController {
     @Autowired
     TokenUtils tokenUtils;
 
+    Logger logger = Logger.getLogger(UserController.class.getName());
+
     @GetMapping
     public ResponseEntity<List<User>> findAll(){
       return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
@@ -67,9 +70,7 @@ public class UserController {
     @GetMapping("/byId/{id}")
     public ResponseEntity<User> getOneById(@PathVariable("id") int id){
         User user = userService.findOneById(id);
-//        if(!user.isP){
-//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//        }
+
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -126,6 +127,8 @@ public class UserController {
         }
         UserDTO userDTO = new UserDTO(createdUser);
 
+        logger.info("USER HAS REGISTERED");
+
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
@@ -136,6 +139,8 @@ public class UserController {
         if (passwordEncoder.matches(resetPasswordDTO.getOldPassword(), user.getPassword())){
             user.setPassword(passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
             user = userService.save(user);
+
+            logger.info("USER HAS CHANGE HIS PASSWORD");
 
             return new ResponseEntity<>(HttpStatus.OK);
         }else {
@@ -157,6 +162,8 @@ public class UserController {
         user.setRoles(Roles.BLOCK_USER);
 
         user = userService.save(user);
+
+        logger.info("MODERATOR BLOCKED THE USER");
 
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }
@@ -214,9 +221,6 @@ public class UserController {
     public ResponseEntity<UserTokenState> createAuthenticationToken(
             @RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) {
 
-        System.out.println("username " + authenticationRequest.getUsername());
-        System.out.println("password " + authenticationRequest.getPassword());
-
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 
@@ -226,11 +230,7 @@ public class UserController {
         String jwt = tokenUtils.generateToken(user);
         int expiresIn = tokenUtils.getExpiredIn();
 
-        System.out.println("Mesto za token");
-        System.out.println(jwt);
-        System.out.println("-----------------------");
-
-
+        logger.info("USER HAS LOGGED IN");
 
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
     }
@@ -249,6 +249,8 @@ public class UserController {
         user.setAvatar(userDTO.getAvatar());
 
         user = userService.save(user);
+
+        logger.info("USER HAS CHANGE HIS DATA ");
 
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "api/posts")
@@ -36,6 +37,7 @@ public class PostController {
     @Autowired
     private ReactionPostService reactionPostService;
 
+    Logger logger = Logger.getLogger(PostController.class.getName());
 
     @GetMapping
     public ResponseEntity<List<PostDTO>> findAll(){
@@ -116,6 +118,7 @@ public class PostController {
         reactionPost.setUserId(postDTO.getUser());
         ReactionPost createdReaction = reactionPostService.createReaction(reactionPost);
 
+        logger.info("USER HAS CREATED A NEW POST");
 
         return new ResponseEntity<>(postDTO, HttpStatus.CREATED);
     }
@@ -134,6 +137,8 @@ public class PostController {
 
         post = postService.save(post);
 
+        logger.info("USER HAS DELETE HIS POST");
+
         return new ResponseEntity<>(new PostDTO(post), HttpStatus.OK);
     }
 
@@ -147,14 +152,12 @@ public class PostController {
 
         post.setTitle(postDTO.getTitle());
         post.setText(postDTO.getText());
-        //post.setImagePath(postDTO.getImagePath());
         post.setCommunity(communityService.getOneById(post.getCommunity().getCommunityId()));
         post.setUser(userService.findOneById(post.getUser().getUserId()));
-//        post.setReports(postDTO.getReports());
-//        post.setFlairs(postDTO.getFlairs());
-
 
         post = postService.save(post);
+
+        logger.info("USER EDITED HIS POST");
 
         return new ResponseEntity<>(new PostDTO(post), HttpStatus.OK);
     }

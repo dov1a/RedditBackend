@@ -124,11 +124,7 @@ public class ReactionPostController {
 
             }else if(reactionPost.getUser().getUserId() == newReaction.getUserId() && reactionPost.getType() == ReactionType.UPVOTE
                     && newReaction.getReactionType() == ReactionType.DOWNVOTE && reactionPost.getPost().getPostId() == newReaction.getPostId()){
-
                 reactionPostService.delete(reactionPost.getReactionId());
-                ReactionPost createdReaction = reactionPostService.createReaction(newReaction);
-                ReactionPostDTO reactionPostDTO = new ReactionPostDTO(createdReaction);
-                return new ResponseEntity<>(reactionPostDTO, HttpStatus.CREATED);
             }
         }
 
@@ -144,9 +140,6 @@ public class ReactionPostController {
                     && newReaction.getReactionType() == ReactionType.UPVOTE && reactionPost.getPost().getPostId() == newReaction.getPostId()){
 
                 reactionPostService.delete(reactionPost.getReactionId());
-                ReactionPost createdReaction = reactionPostService.createReaction(newReaction);
-                ReactionPostDTO reactionPostDTO = new ReactionPostDTO(createdReaction);
-                return new ResponseEntity<>(reactionPostDTO, HttpStatus.CREATED);
             }
 
         }

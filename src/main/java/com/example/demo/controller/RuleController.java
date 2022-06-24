@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "api/rules")
@@ -25,6 +26,8 @@ public class RuleController {
 
     @Autowired
     private CommunityService communityService;
+
+    Logger logger = Logger.getLogger(RuleController.class.getName());
 
     @GetMapping
     public ResponseEntity<List<RuleDTO>> findAll(){
@@ -59,9 +62,6 @@ public class RuleController {
 
         RuleDTO ruleDTO = new RuleDTO(rule);
 
-//        if(po){
-//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//        }
         return new ResponseEntity<>(ruleDTO, HttpStatus.OK);
     }
 
@@ -74,6 +74,8 @@ public class RuleController {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
         RuleDTO ruleDTO = new RuleDTO(createdRule);
+
+        logger.info("THE MODERATOR ADDS A NEW RULE FOR COMMUNITY.");
 
         return new ResponseEntity<>(ruleDTO, HttpStatus.CREATED);
     }
@@ -91,6 +93,8 @@ public class RuleController {
 
         rule = ruleService.save(rule);
 
+        logger.info("THE MODERATOR UPDATED RULE FOR COMMUNITY.");
+
         return new ResponseEntity<>(new RuleDTO(rule), HttpStatus.OK);
     }
 
@@ -106,6 +110,8 @@ public class RuleController {
         rule.setActive("false");
 
         rule = ruleService.save(rule);
+
+        logger.info("THE MODERATOR DELETED RULE FOR COMMUNITY.");
 
         return new ResponseEntity<>(new RuleDTO(rule), HttpStatus.OK);
     }
