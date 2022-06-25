@@ -55,13 +55,12 @@ public class BannedServiceImpl implements BannedService {
     public Banned createBanned(BannedDTO bannedDTO) {
         Optional<Banned> banned = bannedRepository.findById(bannedDTO.getBannedId());
 
-
         System.out.println(bannedDTO.getBannedId());
-
 
         if(banned.isPresent()){
             return null;
         }
+
 
         Banned newBan = new Banned();
         newBan.setTimestamp(LocalDate.now());

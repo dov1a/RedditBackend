@@ -16,10 +16,6 @@ public class CommentDTO implements Serializable {
     private int commentId;
     private String text;
     private LocalDate timestamp;
-    //private CommentDTO repliesTo;
-    private Set<ReportPostDTO> reports;
-    private int reactions;
-    //private CommentDTO comment;
     private int user;
     private int post;
 

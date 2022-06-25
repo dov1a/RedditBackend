@@ -113,23 +113,12 @@ public class CommunityController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<CommunityDTO> deleteCommmunity(@PathVariable Integer id) {
 
-        //TREBA DA OBRISEM COMMUNITY
-        //OBJAVE COMMUNITY
-        //AKO POSTOJI JEDAN MODERATOR OD COMMUNITY ON POSTAJE OBICAN KORISNIK
-
-
-
-        //KOMENTARE OBJAVA
-        //REAKCIJE KOMENTARA
-        //REAKCIJE OBJAVA
-
         List<Post> allPosts = postService.findAll();
-
         List<Post> communityPosts = new ArrayList<>();
-
-
-
+        List<Community> allCommunity = communityService.findAll();
         Community community = communityService.getOneById(id);
+
+        int countCommunityModerator = 0;
 
         if (community == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -150,11 +139,19 @@ public class CommunityController {
             postService.save(post);
         }
 
-        User communityModerator = userService.findOneById(community.getModerator().getUserId());
+        for(Community community1:allCommunity){
+            if (community1.getModerator().getUserId() == community.getModerator().getUserId()){
+                countCommunityModerator = countCommunityModerator + 1;
+            }
+        }
 
-        communityModerator.setRoles(Roles.USER);
+        if (countCommunityModerator == 1){
+            User communityModerator = userService.findOneById(community.getModerator().getUserId());
+            communityModerator.setRoles(Roles.USER);
+            userService.save(communityModerator);
+        }
 
-        userService.save(communityModerator);
+
 
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.OK);
     }
