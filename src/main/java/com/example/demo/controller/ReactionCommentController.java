@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "api/reactionComment")
@@ -28,6 +29,8 @@ public class ReactionCommentController {
 
     @Autowired
     private CommentService commentService;
+
+    Logger logger = Logger.getLogger(ReactionCommentController.class.getName());
 
     @GetMapping
     public ResponseEntity<List<ReactionCommentDTO>> findAll(){

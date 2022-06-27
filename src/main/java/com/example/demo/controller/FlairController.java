@@ -99,6 +99,8 @@ public class FlairController {
 
         flairCommunity = flairCommunityService.save(flairCommunity);
 
+        logger.info("FLAIR IS UPDATED");
+
         return new ResponseEntity<>(new FlairCommunityDTO(flairCommunity), HttpStatus.OK);
     }
 

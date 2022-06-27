@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "api/reactionPost")
@@ -28,8 +29,7 @@ public class ReactionPostController {
     @Autowired
     private PostService postService;
 
-    @Autowired
-    private UserService userService;
+    Logger logger = Logger.getLogger(ReactionPostController.class.getName());
 
     @GetMapping
     public ResponseEntity<List<ReactionPostDTO>> findAll(){

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "api/comments")
@@ -28,6 +29,8 @@ public class CommentController {
 
     @Autowired
     private ReactionCommentService reactionCommentService;
+
+    Logger logger = Logger.getLogger(CommentController.class.getName());
 
     @GetMapping
     public ResponseEntity<List<CommentDTO>> findAll(){
@@ -85,9 +88,10 @@ public class CommentController {
         ReactionCommentDTO reactionComment = new ReactionCommentDTO();
         reactionComment.setCommentId(commentDTO.getCommentId());
         reactionComment.setReactionType(ReactionType.UPVOTE);
-        reactionComment.setUserId(reactionComment.getUserId());
+        reactionComment.setUserId(newComment.getUser());
         ReactionComment createdReaction = reactionCommentService.createReaction(reactionComment);
 
+        logger.info("THE USER COMMENTED ON THE POST!");
 
         return new ResponseEntity<>(commentDTO, HttpStatus.CREATED);
     }

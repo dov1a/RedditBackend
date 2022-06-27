@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "api/communities")
@@ -33,7 +34,7 @@ public class CommunityController {
     @Autowired
     private UserService userService;
 
-
+    Logger logger = Logger.getLogger(CommunityController.class.getName());
 
     @GetMapping
     public ResponseEntity<List<CommunityDTO>> findAll(){
@@ -87,6 +88,8 @@ public class CommunityController {
         }
         CommunityDTO communityDTO = new CommunityDTO(createdCommunity);
 
+        logger.info("THE COMMUNITY HAS BEEN SUCCESSFULLY CREATED!");
+
         return new ResponseEntity<>(communityDTO, HttpStatus.CREATED);
     }
 
@@ -102,7 +105,6 @@ public class CommunityController {
         community.setDescription(communityDTO.getDescription());
         community.setCreationDate(communityDTO.getCreationDate());
         community.setModerator(userService.findOneById(community.getModerator().getUserId()));
-
 
         community = communityService.save(community);
 
@@ -151,7 +153,7 @@ public class CommunityController {
             userService.save(communityModerator);
         }
 
-
+        logger.info("THE COMMUNITY HAS BEEN SUCCESSFULLY DELETED!");
 
         return new ResponseEntity<>(new CommunityDTO(community), HttpStatus.OK);
     }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "api/banned")
@@ -20,6 +21,8 @@ public class BannedController {
 
     @Autowired
     private BannedService bannedService;
+
+    Logger logger = Logger.getLogger(BannedController.class.getName());
 
     @GetMapping
     public ResponseEntity<List<BannedDTO>> findAll(){
@@ -54,6 +57,8 @@ public class BannedController {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
         BannedDTO bannedDTO = new BannedDTO(createdBan);
+
+        logger.info("THE ADMINISTRATOR BANNED THE COMMUNITY!");
 
         return new ResponseEntity<>(bannedDTO, HttpStatus.CREATED);
     }
