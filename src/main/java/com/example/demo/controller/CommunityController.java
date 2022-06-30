@@ -126,6 +126,19 @@ public class CommunityController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        for(Community community1:allCommunity){
+            if (community1.getModerator().getUserId() == community.getModerator().getUserId() && community1.getActive().equals("true")){
+                countCommunityModerator = countCommunityModerator + 1;
+            }
+        }
+
+        if (countCommunityModerator == 1){
+            User communityModerator = userService.findOneById(community.getModerator().getUserId());
+            communityModerator.setRoles(Roles.USER);
+            userService.save(communityModerator);
+        }
+
+
         community.setActive("false");
 
         community = communityService.save(community);
@@ -141,17 +154,7 @@ public class CommunityController {
             postService.save(post);
         }
 
-        for(Community community1:allCommunity){
-            if (community1.getModerator().getUserId() == community.getModerator().getUserId()){
-                countCommunityModerator = countCommunityModerator + 1;
-            }
-        }
 
-        if (countCommunityModerator == 1){
-            User communityModerator = userService.findOneById(community.getModerator().getUserId());
-            communityModerator.setRoles(Roles.USER);
-            userService.save(communityModerator);
-        }
 
         logger.info("THE COMMUNITY HAS BEEN SUCCESSFULLY DELETED!");
 
